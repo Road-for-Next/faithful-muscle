@@ -1,30 +1,12 @@
 {
-  "eslint.workingDirectories": ["./"],
-  "eslint.options": {
-    "overrideConfigFile": "eslint.config.mjs"
-  },
+  "files.eol": "\n",
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.formatOnSave": true,
   "prettier.configPath": ".prettierrc",
+  "editor.formatOnSave": true,
   "workbench.iconTheme": "material-icon-theme",
-  "material-icon-theme.folders.associations": {
-    "_components": "Components",
-    "_constants": "Constant",
-    "_hooks": "Hook",
-    "_store": "Container",
-    "_types": "Typescript",
-    "_utils": "Utils",
-    "(routes)": "Routes"
-  },
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "always"
+    "source.fixAll.eslint": "explicit"
   },
-  "eslint.validate": [
-    "javascript",
-    "javascriptreact",
-    "typescript",
-    "typescriptreact"
-  ],
   "files.associations": {
     "*.css": "tailwindcss"
   },
@@ -32,16 +14,13 @@
     "strings": "on"
   },
   "files.exclude": {
-    "**/dist": true,
-    "**/.git": true,
-  },
-  "search.exclude": {
-    "**/dist": true,
+    "**/.git": true
   },
   "files.watcherExclude": {
-    "**/node_modules/**": true,
-    "**/dist/**": true,
     "**/.next": true
   },
-  "typescript.tsserver.maxTsServerMemory": 4096
+  "typescript.tsserver.maxTsServerMemory": 4096,
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }
