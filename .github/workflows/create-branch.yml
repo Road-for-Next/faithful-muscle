@@ -1,0 +1,42 @@
+name: Create Issue Branch
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  create_issue_branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Create and push branch
+        run: |
+          BRANCH_NAME="feature/issue-${{ github.event.issue.number }}"
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git checkout develop
+          git pull origin develop
+          git checkout -b $BRANCH_NAME
+          git push origin $BRANCH_NAME
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+
+      - name: Comment on issue
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.TOKEN }}
+          script: |
+            const branchName = `feature/issue-${{ github.event.issue.number }}`;
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `\`\`\`\n`
+                    + `git fetch\n`
+                    + `git checkout -b ${branchName} origin/${branchName}\n`
+                    + `\`\`\``
+            });
