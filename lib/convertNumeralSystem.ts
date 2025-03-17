@@ -1,10 +1,9 @@
 function convert10to64(decimal: number) {
-  console.log('10to64');
   const base64Chars =
     'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
   let result = '';
   if (decimal === 0) {
-    return 'A'; // 0에 대한 특별한 처리
+    return 'A';
   }
   while (decimal > 0) {
     result = base64Chars[decimal % 64] + result;
@@ -14,7 +13,6 @@ function convert10to64(decimal: number) {
 }
 
 function convert64to10(base64: string) {
-  console.log('64to10');
   const base64Chars =
     'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
   let result = 0;
