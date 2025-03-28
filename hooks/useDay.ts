@@ -9,7 +9,7 @@ const initializeDay = () => DAY_LIST[new Date().getDay()];
 const useDay = () => {
   const [day, set] = useState<Day>(() => initializeDay());
 
-  const setDay = (param?: number | string) => {
+  const setDay = (param?: number | Day) => {
     switch (typeof param) {
       case 'number':
         set(DAY_LIST[param]);
