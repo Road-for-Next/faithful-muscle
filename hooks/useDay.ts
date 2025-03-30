@@ -17,6 +17,7 @@ const useDay = () => {
   const setDay = (param?: number | Day) => {
     switch (typeof param) {
       case 'number':
+        if (param < 0 || param > 6) return;
         set(DAY_LIST[param]);
         break;
       case 'string':
