@@ -5,10 +5,9 @@ export default function Home() {
   return (
     <div>
       <Container className="relative">
-        <div className="absolute top-2 right-2 z-10">
-          <ThemeSelector />
+        <div className="flex items-center justify-between">
+          <h1>Home</h1> <ThemeSelector />
         </div>
-        <h1>Home</h1>
       </Container>
     </div>
   );
