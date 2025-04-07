@@ -1,7 +1,7 @@
 const BASE_LENGTH = 62;
 
 const convert10to62 = (decimal: number) => {
-  const baseChars = process.env.BASE62_CHARS;
+  const baseChars = process.env.NEXT_PUBLIC_BASE62_CHARS;
   if (!baseChars) throw new Error('BASE62_CHARS is not defined');
   const length = baseChars.length;
   if (length !== BASE_LENGTH)
@@ -19,7 +19,7 @@ const convert10to62 = (decimal: number) => {
 };
 
 const convert62to10 = (base62: string) => {
-  const baseChars = process.env.BASE62_CHARS;
+  const baseChars = process.env.NEXT_PUBLIC_BASE62_CHARS;
   if (!baseChars) throw new Error('BASE62_CHARS is not defined');
   const length = baseChars.length;
   if (length !== BASE_LENGTH)

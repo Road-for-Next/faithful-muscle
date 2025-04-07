@@ -7,6 +7,25 @@
 @theme {
   --container-m-min: 360px;
   --container-m-max: 430px;
+
+  --animate-fade-out: fade-out 300ms forwards;
+  --animate-fade-in: fade-in 300ms forwards;
+
+  @keyframes fade-in {
+    0% {
+      opacity: 0;
+    }
+    ,
+    100% {
+      opacity: 100%;
+    }
+  }
+
+  @keyframes fade-out {
+    100% {
+      opacity: 0;
+    }
+  }
 }
 
 @theme inline {
