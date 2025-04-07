@@ -1,9 +1,9 @@
 type GroupType = { weight: string; reps: string; set: string };
-type ExerciseType = { exercise: string; groups: GroupType[] };
+type ExerciseType = { exerciseId: string; groups: GroupType[] };
 
 const COLUMN_DATA: ExerciseType[] = JSON.parse(`[
   {
-    "exercise": "0",
+    "exerciseId": "0",
     "groups": [
       {
         "weight": "1I",
@@ -18,7 +18,7 @@ const COLUMN_DATA: ExerciseType[] = JSON.parse(`[
     ]
   },
   {
-    "exercise": "1",
+    "exerciseId": "1",
     "groups": [
       {
         "weight": "10",
@@ -38,7 +38,7 @@ const COLUMN_DATA: ExerciseType[] = JSON.parse(`[
     ]
   },
   {
-    "exercise": "2",
+    "exerciseId": "2",
     "groups": [
       {
         "weight": "10",
@@ -48,7 +48,7 @@ const COLUMN_DATA: ExerciseType[] = JSON.parse(`[
     ]
   },
   {
-    "exercise": "3",
+    "exerciseId": "3",
     "groups": [
       {
         "weight": "10",
@@ -73,7 +73,7 @@ const COLUMN_DATA: ExerciseType[] = JSON.parse(`[
     ]
   },
   {
-    "exercise": "4",
+    "exerciseId": "4",
     "groups": [
       {
         "weight": "10",
@@ -88,7 +88,7 @@ const COLUMN_DATA: ExerciseType[] = JSON.parse(`[
     ]
   },
   {
-    "exercise": "5",
+    "exerciseId": "5",
     "groups": [
       {
         "weight": "10",
@@ -113,7 +113,7 @@ const COLUMN_DATA: ExerciseType[] = JSON.parse(`[
     ]
   },
   {
-    "exercise": "6",
+    "exerciseId": "6",
     "groups": [
       {
         "weight": "10",
@@ -123,7 +123,7 @@ const COLUMN_DATA: ExerciseType[] = JSON.parse(`[
     ]
   },
   {
-    "exercise": "7",
+    "exerciseId": "7",
     "groups": [
       {
         "weight": "10",
@@ -143,7 +143,7 @@ const COLUMN_DATA: ExerciseType[] = JSON.parse(`[
     ]
   },
   {
-    "exercise": "8",
+    "exerciseId": "8",
     "groups": [
       {
         "weight": "10",
@@ -158,7 +158,7 @@ const COLUMN_DATA: ExerciseType[] = JSON.parse(`[
     ]
   },
   {
-    "exercise": "9",
+    "exerciseId": "9",
     "groups": [
       {
         "weight": "10",
