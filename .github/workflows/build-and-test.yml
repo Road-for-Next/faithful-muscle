@@ -20,5 +20,9 @@ jobs:
         run: npm ci
       - name: Build
         run: npm run build
+        env:
+          NEXT_PUBLIC_BASE62_CHARS: ${{ secrets.NEXT_PUBLIC_BASE62_CHARS }}
       - name: Test
         run: npm test
+        env:
+          NEXT_PUBLIC_BASE62_CHARS: ${{ secrets.NEXT_PUBLIC_BASE62_CHARS }}
