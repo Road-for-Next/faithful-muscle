@@ -8,7 +8,7 @@ export default function Home() {
 
   return (
     <Container>
-      <div className="flex items-center justify-between">
+      <div className="mb-4 flex items-center justify-between">
         <h1>Home</h1> <ThemeSelector />
       </div>
       <div className="flex flex-col gap-4">
