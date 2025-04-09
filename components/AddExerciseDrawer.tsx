@@ -13,16 +13,17 @@ import {
 export default function AddExerciseDrawer() {
   return (
     <Drawer>
-      <DrawerTrigger>
-        <Button>Add</Button>
+      <DrawerTrigger asChild>
+        <Button>추가하기</Button>
       </DrawerTrigger>
-      <DrawerContent>
-        <DrawerHeader>
-          <DrawerTitle>Are you absolutely sure?</DrawerTitle>
-          <DrawerDescription>This action cannot be undone.</DrawerDescription>
+      <DrawerContent className="h-[80vh]">
+        <DrawerHeader className="hidden">
+          <DrawerTitle>운동 추가하기</DrawerTitle>
+          <DrawerDescription>
+            운동을 검색해서 루틴에 추가해보세요
+          </DrawerDescription>
         </DrawerHeader>
         <DrawerFooter>
-          <Button>Submit</Button>
           <DrawerClose asChild>
             <Button variant="outline">Cancel</Button>
           </DrawerClose>
