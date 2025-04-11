@@ -21,6 +21,7 @@ import {
   CommandShortcut,
 } from './ui/command';
 import { EXERCISE_DATA, ExerciseType } from '@/mock/exercise';
+import { Dumbbell } from 'lucide-react';
 
 export default function AddExerciseDrawer() {
   const [keyword, setKeyword] = useState('');
@@ -48,22 +49,29 @@ export default function AddExerciseDrawer() {
         <Button>추가하기</Button>
       </DrawerTrigger>
       <DrawerContent className="h-[80vh]">
-        <DrawerHeader className="hidden">
-          <DrawerTitle>운동 추가하기</DrawerTitle>
-          <DrawerDescription>
-            운동을 검색해서 루틴에 추가해보세요
+        <DrawerHeader className="pb-2">
+          <DrawerTitle className="flex items-center gap-1">
+            <Dumbbell className="size-4" />
+            <span>운동 추가하기</span>
+          </DrawerTitle>
+          <DrawerDescription className="text-xs">
+            운동을 검색해서 루틴에 추가해보세요!
           </DrawerDescription>
         </DrawerHeader>
 
-        <Command label="운동 검색" className="mt-4" shouldFilter={false}>
+        <Command
+          label="운동 검색"
+          className="bg-background"
+          shouldFilter={false}
+        >
           <CommandInput
             value={keyword}
             onValueChange={(value) => setKeyword(value)}
             placeholder="운동을 검색하세요..."
             autoFocus
           />
-          <CommandList>
-            {keyword && <CommandEmpty>No results found.</CommandEmpty>}
+          <CommandList className="mx-2 max-h-full grow">
+            {keyword && <CommandEmpty>검색된 운동이 없습니다.</CommandEmpty>}
             {suggestions.map((e) => (
               <CommandItem
                 key={e.id}
