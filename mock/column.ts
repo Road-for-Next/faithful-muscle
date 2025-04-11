@@ -1,7 +1,8 @@
 type GroupType = { weight: string; reps: string; set: string };
-type ExerciseType = { exerciseId: string; groups: GroupType[] };
+type RowType = { exerciseId: string; groups: GroupType[] };
+type ColumnType = RowType[];
 
-const COLUMN_DATA: ExerciseType[] = JSON.parse(`[
+const COLUMN_DATA: ColumnType = JSON.parse(`[
   {
     "exerciseId": "0",
     "groups": [
@@ -174,5 +175,5 @@ const COLUMN_DATA: ExerciseType[] = JSON.parse(`[
   }
 ]`);
 
-export type { GroupType, ExerciseType };
+export type { GroupType, RowType, ColumnType };
 export { COLUMN_DATA };
