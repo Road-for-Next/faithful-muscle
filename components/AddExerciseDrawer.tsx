@@ -11,7 +11,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from '@/components/ui/drawer';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   Command,
   CommandEmpty,
@@ -22,13 +22,31 @@ import {
 } from './ui/command';
 import { EXERCISE_DATA, ExerciseType } from '@/mock/exercise';
 import { Dumbbell } from 'lucide-react';
+import { RowType } from '@/mock/column';
 
-export default function AddExerciseDrawer() {
+interface props {
+  onAdd: (exercise: RowType) => void;
+}
+
+export default function AddExerciseDrawer({ onAdd }: props) {
   const [keyword, setKeyword] = useState('');
   const [suggestions, setSuggestions] = useState<ExerciseType[]>([]);
-  const [selected, setSelected] = useState<ExerciseType | null>(null);
+  const [able, setAble] = useState(true);
+  const closerRef = useRef<HTMLButtonElement>(null);
 
-  useEffect(() => console.log(selected), [selected]);
+  const handleSelectExercise = (id: string) => {
+    if (able) {
+      setAble(false);
+      const exercise: RowType = { exerciseId: id, groups: [] };
+      onAdd(exercise);
+    }
+    closerRef.current?.click();
+  };
+
+  const reset = () => {
+    setAble(true);
+    setKeyword('');
+  };
 
   useEffect(() => {
     if (keyword.length > 0) {
@@ -44,7 +62,7 @@ export default function AddExerciseDrawer() {
   }, [keyword]);
 
   return (
-    <Drawer onClose={() => setKeyword('')}>
+    <Drawer onClose={reset}>
       <DrawerTrigger asChild>
         <Button>추가하기</Button>
       </DrawerTrigger>
@@ -75,8 +93,9 @@ export default function AddExerciseDrawer() {
             {suggestions.map((e) => (
               <CommandItem
                 key={e.id}
+                value={e.id}
                 keywords={[e.ko, e.en]}
-                onSelect={() => setSelected(e)}
+                onSelect={handleSelectExercise}
               >
                 <span>{e.ko}</span>
                 <span className="text-muted-foreground text-xs">{e.en}</span>
@@ -88,7 +107,9 @@ export default function AddExerciseDrawer() {
 
         <DrawerFooter>
           <DrawerClose asChild>
-            <Button variant="outline">Cancel</Button>
+            <Button variant="outline" ref={closerRef}>
+              Cancel
+            </Button>
           </DrawerClose>
         </DrawerFooter>
       </DrawerContent>
