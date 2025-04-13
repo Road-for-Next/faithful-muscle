@@ -1,6 +1,5 @@
 'use client';
 
-import { ExerciseType } from '@/mock/column';
 import {
   Card,
   CardAction,
@@ -13,9 +12,10 @@ import { EXERCISE_DATA } from '@/mock/exercise';
 import { convert62to10 } from '@/lib/convertNumeralSystem';
 import { ChevronUp } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { RowType } from '@/mock/column';
 
 interface ExerciseCardProps {
-  exercise: ExerciseType;
+  exercise: RowType;
 }
 
 export default function ExerciseCard({ exercise }: ExerciseCardProps) {
