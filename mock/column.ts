@@ -1,4 +1,4 @@
-type GroupType = { weight: string; reps: string; set: string };
+type GroupType = { weight: string; reps: string };
 type RowType = { exerciseId: string; groups: GroupType[] };
 type ColumnType = RowType[];
 
@@ -8,13 +8,11 @@ const COLUMN_DATA: ColumnType = JSON.parse(`[
     "groups": [
       {
         "weight": "1I",
-        "reps": "8",
-        "set": "3"
+        "reps": "8"
       },
       {
         "weight": "1U",
-        "reps": "6",
-        "set": "1"
+        "reps": "6"
       }
     ]
   },
@@ -23,18 +21,15 @@ const COLUMN_DATA: ColumnType = JSON.parse(`[
     "groups": [
       {
         "weight": "10",
-        "reps": "A",
-        "set": "3"
+        "reps": "A"
       },
       {
         "weight": "14",
-        "reps": "8",
-        "set": "2"
+        "reps": "8"
       },
       {
         "weight": "18",
-        "reps": "6",
-        "set": "1"
+        "reps": "6"
       }
     ]
   },
@@ -43,8 +38,7 @@ const COLUMN_DATA: ColumnType = JSON.parse(`[
     "groups": [
       {
         "weight": "10",
-        "reps": "A",
-        "set": "5"
+        "reps": "A"
       }
     ]
   },
@@ -53,23 +47,19 @@ const COLUMN_DATA: ColumnType = JSON.parse(`[
     "groups": [
       {
         "weight": "10",
-        "reps": "A",
-        "set": "3"
+        "reps": "A"
       },
       {
         "weight": "14",
-        "reps": "8",
-        "set": "2"
+        "reps": "8"
       },
       {
         "weight": "18",
-        "reps": "6",
-        "set": "1"
+        "reps": "6"
       },
       {
         "weight": "1C",
-        "reps": "4",
-        "set": "1"
+        "reps": "4"
       }
     ]
   },
@@ -78,13 +68,11 @@ const COLUMN_DATA: ColumnType = JSON.parse(`[
     "groups": [
       {
         "weight": "10",
-        "reps": "A",
-        "set": "3"
+        "reps": "A"
       },
       {
         "weight": "14",
-        "reps": "8",
-        "set": "2"
+        "reps": "8"
       }
     ]
   },
@@ -93,23 +81,19 @@ const COLUMN_DATA: ColumnType = JSON.parse(`[
     "groups": [
       {
         "weight": "10",
-        "reps": "A",
-        "set": "3"
+        "reps": "A"
       },
       {
         "weight": "14",
-        "reps": "8",
-        "set": "2"
+        "reps": "8"
       },
       {
         "weight": "18",
-        "reps": "6",
-        "set": "1"
+        "reps": "6"
       },
       {
         "weight": "1C",
-        "reps": "4",
-        "set": "1"
+        "reps": "4"
       }
     ]
   },
@@ -118,8 +102,7 @@ const COLUMN_DATA: ColumnType = JSON.parse(`[
     "groups": [
       {
         "weight": "10",
-        "reps": "A",
-        "set": "3"
+        "reps": "A"
       }
     ]
   },
@@ -128,18 +111,15 @@ const COLUMN_DATA: ColumnType = JSON.parse(`[
     "groups": [
       {
         "weight": "10",
-        "reps": "A",
-        "set": "3"
+        "reps": "A"
       },
       {
         "weight": "14",
-        "reps": "8",
-        "set": "2"
+        "reps": "8"
       },
       {
         "weight": "18",
-        "reps": "6",
-        "set": "1"
+        "reps": "6"
       }
     ]
   },
@@ -148,13 +128,11 @@ const COLUMN_DATA: ColumnType = JSON.parse(`[
     "groups": [
       {
         "weight": "10",
-        "reps": "A",
-        "set": "3"
+        "reps": "A"
       },
       {
         "weight": "14",
-        "reps": "8",
-        "set": "2"
+        "reps": "8"
       }
     ]
   },
@@ -163,13 +141,11 @@ const COLUMN_DATA: ColumnType = JSON.parse(`[
     "groups": [
       {
         "weight": "10",
-        "reps": "A",
-        "set": "3"
+        "reps": "A"
       },
       {
         "weight": "14",
-        "reps": "8",
-        "set": "2"
+        "reps": "8"
       }
     ]
   }

@@ -56,14 +56,13 @@ export default function ExerciseCard({ exercise }: ExerciseCardProps) {
         data-open={open}
         ref={contentRef}
       >
-        {groups.map(({ weight, reps, set }, i) => (
+        {groups.map(({ weight, reps }, i) => (
           <div
-            key={`${weight}-${reps}-${set}-${i}`}
+            key={`${weight}-${reps}-${i}`}
             className="flex items-center gap-4"
           >
             <span>중량 : {convert62to10(weight)}</span>
             <span>반복 : {convert62to10(reps)}</span>
-            <span>세트 : {convert62to10(set)}</span>
           </div>
         ))}
       </CardContent>
