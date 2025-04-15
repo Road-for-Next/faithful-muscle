@@ -14,12 +14,12 @@ import { ChevronUp } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { RowType } from '@/mock/column';
 
-interface ExerciseCardProps {
-  exercise: RowType;
+interface Props {
+  row: RowType;
 }
 
-export default function ExerciseCard({ exercise }: ExerciseCardProps) {
-  const { exerciseId, groups } = exercise;
+export default function RowCard({ row }: Props) {
+  const { exerciseId, groups } = row;
   const data = EXERCISE_DATA.find((e) => e.id === exerciseId);
   const contentRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
