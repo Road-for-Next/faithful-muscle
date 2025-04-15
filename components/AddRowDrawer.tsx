@@ -28,7 +28,7 @@ interface props {
   onAdd: (exercise: RowType) => void;
 }
 
-export default function AddExerciseDrawer({ onAdd }: props) {
+export default function AddRowDrawer({ onAdd }: props) {
   const [keyword, setKeyword] = useState('');
   const [suggestions, setSuggestions] = useState<ExerciseType[]>([]);
   const [able, setAble] = useState(true);
