@@ -12,12 +12,14 @@ export default function Home() {
   const [data, setData] = useState<ColumnType[]>([COLUMN_DATA]);
   const [day, setDay] = useState(new Date().getDay());
 
-  const handleAddRow = (exercise: RowType) =>
+  const handleAddRow = (row: RowType) => {
     setData((prev) => {
       const next = [...prev];
-      next[day].push(exercise);
+      if (next[day]) next[day] = [...next[day], row];
+      else next[day] = [row];
       return next;
     });
+  };
 
   const handleSelectDay = (day: number) => setDay(day);
 
