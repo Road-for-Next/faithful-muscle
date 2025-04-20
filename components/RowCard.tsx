@@ -13,6 +13,7 @@ import { convert62to10 } from '@/lib/convertNumeralSystem';
 import { ChevronUp } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { RowType } from '@/mock/column';
+import { cn } from '@/lib/utils';
 
 interface Props {
   row: RowType;
@@ -44,14 +45,24 @@ export default function RowCard({ row }: Props) {
         </div>
         <CardAction>
           <ChevronUp
-            className="size-4 transition-transform duration-300 data-[open=true]:rotate-180"
+            className={cn(
+              'size-4',
+              'transition-transform duration-300',
+              'data-[open=true]:rotate-180',
+            )}
             data-open={open}
           />
         </CardAction>
       </CardHeader>
 
       <CardContent
-        className="data-[open=true]:animate-fade-in data-[open=false]:animate-fade-out mx-0 flex flex-col gap-2 overflow-hidden px-2 py-0 text-sm transition-all duration-300"
+        className={cn(
+          'flex flex-col gap-2',
+          'mx-0 overflow-hidden px-2 py-0 text-sm',
+          'transition-all duration-300',
+          'data-[open=true]:animate-fade-in',
+          'data-[open=false]:animate-fade-out',
+        )}
         style={{ maxHeight }}
         data-open={open}
         ref={contentRef}
