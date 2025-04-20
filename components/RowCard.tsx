@@ -1,6 +1,5 @@
 'use client';
 
-import { ExerciseType } from '@/mock/column';
 import {
   Card,
   CardAction,
@@ -13,13 +12,14 @@ import { EXERCISE_DATA } from '@/mock/exercise';
 import { convert62to10 } from '@/lib/convertNumeralSystem';
 import { ChevronUp } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { RowType } from '@/mock/column';
 
-interface ExerciseCardProps {
-  exercise: ExerciseType;
+interface Props {
+  row: RowType;
 }
 
-export default function ExerciseCard({ exercise }: ExerciseCardProps) {
-  const { exerciseId, groups } = exercise;
+export default function RowCard({ row }: Props) {
+  const { exerciseId, sets } = row;
   const data = EXERCISE_DATA.find((e) => e.id === exerciseId);
   const contentRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
@@ -56,14 +56,13 @@ export default function ExerciseCard({ exercise }: ExerciseCardProps) {
         data-open={open}
         ref={contentRef}
       >
-        {groups.map(({ weight, reps, set }, i) => (
+        {sets.map(({ weight, reps }, i) => (
           <div
-            key={`${weight}-${reps}-${set}-${i}`}
+            key={`${weight}-${reps}-${i}`}
             className="flex items-center gap-4"
           >
             <span>중량 : {convert62to10(weight)}</span>
             <span>반복 : {convert62to10(reps)}</span>
-            <span>세트 : {convert62to10(set)}</span>
           </div>
         ))}
       </CardContent>

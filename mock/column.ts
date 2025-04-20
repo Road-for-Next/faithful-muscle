@@ -1,178 +1,155 @@
-type GroupType = { weight: string; reps: string; set: string };
-type ExerciseType = { exerciseId: string; groups: GroupType[] };
+type SetType = { weight: string; reps: string };
+type RowType = { exerciseId: string; sets: SetType[] };
+type ColumnType = RowType[];
 
-const COLUMN_DATA: ExerciseType[] = JSON.parse(`[
+const COLUMN_DATA: ColumnType = JSON.parse(`[
   {
     "exerciseId": "0",
-    "groups": [
+    "sets": [
       {
         "weight": "1I",
-        "reps": "8",
-        "set": "3"
+        "reps": "8"
       },
       {
         "weight": "1U",
-        "reps": "6",
-        "set": "1"
+        "reps": "6"
       }
     ]
   },
   {
     "exerciseId": "1",
-    "groups": [
+    "sets": [
       {
         "weight": "10",
-        "reps": "A",
-        "set": "3"
+        "reps": "A"
       },
       {
         "weight": "14",
-        "reps": "8",
-        "set": "2"
+        "reps": "8"
       },
       {
         "weight": "18",
-        "reps": "6",
-        "set": "1"
+        "reps": "6"
       }
     ]
   },
   {
     "exerciseId": "2",
-    "groups": [
+    "sets": [
       {
         "weight": "10",
-        "reps": "A",
-        "set": "5"
+        "reps": "A"
       }
     ]
   },
   {
     "exerciseId": "3",
-    "groups": [
+    "sets": [
       {
         "weight": "10",
-        "reps": "A",
-        "set": "3"
+        "reps": "A"
       },
       {
         "weight": "14",
-        "reps": "8",
-        "set": "2"
+        "reps": "8"
       },
       {
         "weight": "18",
-        "reps": "6",
-        "set": "1"
+        "reps": "6"
       },
       {
         "weight": "1C",
-        "reps": "4",
-        "set": "1"
+        "reps": "4"
       }
     ]
   },
   {
     "exerciseId": "4",
-    "groups": [
+    "sets": [
       {
         "weight": "10",
-        "reps": "A",
-        "set": "3"
+        "reps": "A"
       },
       {
         "weight": "14",
-        "reps": "8",
-        "set": "2"
+        "reps": "8"
       }
     ]
   },
   {
     "exerciseId": "5",
-    "groups": [
+    "sets": [
       {
         "weight": "10",
-        "reps": "A",
-        "set": "3"
+        "reps": "A"
       },
       {
         "weight": "14",
-        "reps": "8",
-        "set": "2"
+        "reps": "8"
       },
       {
         "weight": "18",
-        "reps": "6",
-        "set": "1"
+        "reps": "6"
       },
       {
         "weight": "1C",
-        "reps": "4",
-        "set": "1"
+        "reps": "4"
       }
     ]
   },
   {
     "exerciseId": "6",
-    "groups": [
+    "sets": [
       {
         "weight": "10",
-        "reps": "A",
-        "set": "3"
+        "reps": "A"
       }
     ]
   },
   {
     "exerciseId": "7",
-    "groups": [
+    "sets": [
       {
         "weight": "10",
-        "reps": "A",
-        "set": "3"
+        "reps": "A"
       },
       {
         "weight": "14",
-        "reps": "8",
-        "set": "2"
+        "reps": "8"
       },
       {
         "weight": "18",
-        "reps": "6",
-        "set": "1"
+        "reps": "6"
       }
     ]
   },
   {
     "exerciseId": "8",
-    "groups": [
+    "sets": [
       {
         "weight": "10",
-        "reps": "A",
-        "set": "3"
+        "reps": "A"
       },
       {
         "weight": "14",
-        "reps": "8",
-        "set": "2"
+        "reps": "8"
       }
     ]
   },
   {
     "exerciseId": "9",
-    "groups": [
+    "sets": [
       {
         "weight": "10",
-        "reps": "A",
-        "set": "3"
+        "reps": "A"
       },
       {
         "weight": "14",
-        "reps": "8",
-        "set": "2"
+        "reps": "8"
       }
     ]
   }
 ]`);
 
-export type { GroupType, ExerciseType };
+export type { SetType, RowType, ColumnType };
 export { COLUMN_DATA };
