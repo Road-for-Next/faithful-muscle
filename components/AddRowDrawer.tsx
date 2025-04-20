@@ -66,7 +66,7 @@ export default function AddRowDrawer({ onAdd }: props) {
       <DrawerTrigger asChild>
         <Button>추가하기</Button>
       </DrawerTrigger>
-      <DrawerContent className="h-[80vh]">
+      <DrawerContent className="max-w-m-max min-w-m-min mx-auto h-[80vh]">
         <DrawerHeader className="pb-2">
           <DrawerTitle className="flex items-center gap-1">
             <Dumbbell className="size-4" />
