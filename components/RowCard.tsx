@@ -19,7 +19,7 @@ interface Props {
 }
 
 export default function RowCard({ row }: Props) {
-  const { exerciseId, groups } = row;
+  const { exerciseId, sets } = row;
   const data = EXERCISE_DATA.find((e) => e.id === exerciseId);
   const contentRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
@@ -56,7 +56,7 @@ export default function RowCard({ row }: Props) {
         data-open={open}
         ref={contentRef}
       >
-        {groups.map(({ weight, reps }, i) => (
+        {sets.map(({ weight, reps }, i) => (
           <div
             key={`${weight}-${reps}-${i}`}
             className="flex items-center gap-4"

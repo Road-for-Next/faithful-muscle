@@ -1,11 +1,11 @@
-type GroupType = { weight: string; reps: string };
-type RowType = { exerciseId: string; groups: GroupType[] };
+type SetType = { weight: string; reps: string };
+type RowType = { exerciseId: string; sets: SetType[] };
 type ColumnType = RowType[];
 
 const COLUMN_DATA: ColumnType = JSON.parse(`[
   {
     "exerciseId": "0",
-    "groups": [
+    "sets": [
       {
         "weight": "1I",
         "reps": "8"
@@ -18,7 +18,7 @@ const COLUMN_DATA: ColumnType = JSON.parse(`[
   },
   {
     "exerciseId": "1",
-    "groups": [
+    "sets": [
       {
         "weight": "10",
         "reps": "A"
@@ -35,7 +35,7 @@ const COLUMN_DATA: ColumnType = JSON.parse(`[
   },
   {
     "exerciseId": "2",
-    "groups": [
+    "sets": [
       {
         "weight": "10",
         "reps": "A"
@@ -44,7 +44,7 @@ const COLUMN_DATA: ColumnType = JSON.parse(`[
   },
   {
     "exerciseId": "3",
-    "groups": [
+    "sets": [
       {
         "weight": "10",
         "reps": "A"
@@ -65,7 +65,7 @@ const COLUMN_DATA: ColumnType = JSON.parse(`[
   },
   {
     "exerciseId": "4",
-    "groups": [
+    "sets": [
       {
         "weight": "10",
         "reps": "A"
@@ -78,7 +78,7 @@ const COLUMN_DATA: ColumnType = JSON.parse(`[
   },
   {
     "exerciseId": "5",
-    "groups": [
+    "sets": [
       {
         "weight": "10",
         "reps": "A"
@@ -99,7 +99,7 @@ const COLUMN_DATA: ColumnType = JSON.parse(`[
   },
   {
     "exerciseId": "6",
-    "groups": [
+    "sets": [
       {
         "weight": "10",
         "reps": "A"
@@ -108,7 +108,7 @@ const COLUMN_DATA: ColumnType = JSON.parse(`[
   },
   {
     "exerciseId": "7",
-    "groups": [
+    "sets": [
       {
         "weight": "10",
         "reps": "A"
@@ -125,7 +125,7 @@ const COLUMN_DATA: ColumnType = JSON.parse(`[
   },
   {
     "exerciseId": "8",
-    "groups": [
+    "sets": [
       {
         "weight": "10",
         "reps": "A"
@@ -138,7 +138,7 @@ const COLUMN_DATA: ColumnType = JSON.parse(`[
   },
   {
     "exerciseId": "9",
-    "groups": [
+    "sets": [
       {
         "weight": "10",
         "reps": "A"
@@ -151,5 +151,5 @@ const COLUMN_DATA: ColumnType = JSON.parse(`[
   }
 ]`);
 
-export type { GroupType, RowType, ColumnType };
+export type { SetType, RowType, ColumnType };
 export { COLUMN_DATA };

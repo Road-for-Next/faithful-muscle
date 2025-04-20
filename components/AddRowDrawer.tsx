@@ -25,7 +25,7 @@ import { Dumbbell } from 'lucide-react';
 import { RowType } from '@/mock/column';
 
 interface props {
-  onAdd: (exercise: RowType) => void;
+  onAdd: (row: RowType) => void;
 }
 
 export default function AddRowDrawer({ onAdd }: props) {
@@ -37,8 +37,8 @@ export default function AddRowDrawer({ onAdd }: props) {
   const handleSelectExercise = (id: string) => {
     if (able) {
       setAble(false);
-      const exercise: RowType = { exerciseId: id, groups: [] };
-      onAdd(exercise);
+      const row: RowType = { exerciseId: id, sets: [] };
+      onAdd(row);
     }
     closerRef.current?.click();
   };
