@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/card';
 import { EXERCISE_DATA } from '@/mock/exercise';
 import { convert62to10 } from '@/lib/convertNumeralSystem';
-import { ChevronUp } from 'lucide-react';
+import { ChevronUp, Dumbbell, RefreshCw } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { RowType } from '@/mock/column';
 import { cn } from '@/lib/utils';
@@ -74,8 +74,14 @@ export default function RowCard({ row }: Props) {
               key={`${weight}-${reps}-${i}`}
               className="flex items-center gap-4"
             >
-              <span>중량 : {convert62to10(weight)}</span>
-              <span>반복 : {convert62to10(reps)}</span>
+              <div className="flex items-center gap-1">
+                <Dumbbell className="size-4" />
+                <span>중량 : {convert62to10(weight)}</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <RefreshCw className="size-4" />
+                <span>반복 : {convert62to10(reps)}</span>
+              </div>
             </div>
           ))}
         </CardContent>
