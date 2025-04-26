@@ -5,6 +5,7 @@ import {
   CardAction,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
@@ -14,6 +15,7 @@ import { ChevronUp } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { RowType } from '@/mock/column';
 import { cn } from '@/lib/utils';
+import { Button } from './ui/button';
 
 interface Props {
   row: RowType;
@@ -22,13 +24,13 @@ interface Props {
 export default function RowCard({ row }: Props) {
   const { exerciseId, sets } = row;
   const data = EXERCISE_DATA.find((e) => e.id === exerciseId);
-  const contentRef = useRef<HTMLDivElement>(null);
+  const bodyRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
   const [maxHeight, setMaxHeight] = useState(0);
 
   useEffect(() => {
-    if (contentRef.current) {
-      const contentHeight = contentRef.current.scrollHeight;
+    if (bodyRef.current) {
+      const contentHeight = bodyRef.current.scrollHeight;
       setMaxHeight(open ? contentHeight : 0);
     }
   }, [open]);
@@ -54,29 +56,35 @@ export default function RowCard({ row }: Props) {
           />
         </CardAction>
       </CardHeader>
-
-      <CardContent
+      <div
         className={cn(
-          'flex flex-col gap-2',
-          'mx-0 overflow-hidden px-2 py-0 text-sm',
-          'transition-all duration-300',
+          'overflow-hidden transition-all duration-300',
           'data-[open=true]:animate-fade-in',
           'data-[open=false]:animate-fade-out',
         )}
         style={{ maxHeight }}
         data-open={open}
-        ref={contentRef}
+        ref={bodyRef}
       >
-        {sets.map(({ weight, reps }, i) => (
-          <div
-            key={`${weight}-${reps}-${i}`}
-            className="flex items-center gap-4"
-          >
-            <span>중량 : {convert62to10(weight)}</span>
-            <span>반복 : {convert62to10(reps)}</span>
-          </div>
-        ))}
-      </CardContent>
+        <CardContent
+          className={cn('flex flex-col gap-2', 'mx-0 px-2 py-0 text-sm')}
+        >
+          {sets.map(({ weight, reps }, i) => (
+            <div
+              key={`${weight}-${reps}-${i}`}
+              className="flex items-center gap-4"
+            >
+              <span>중량 : {convert62to10(weight)}</span>
+              <span>반복 : {convert62to10(reps)}</span>
+            </div>
+          ))}
+        </CardContent>
+        <CardFooter className="mt-4 px-0">
+          <Button variant="outline" className="w-full">
+            추가하기
+          </Button>
+        </CardFooter>
+      </div>
     </Card>
   );
 }
