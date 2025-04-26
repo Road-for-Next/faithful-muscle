@@ -36,6 +36,18 @@ export default function Home() {
     });
   };
 
+  const handleDeleteRowSet = (id: string, index: number) => {
+    setData((prev) => {
+      const next = [...prev];
+      next[day] = next[day].map((e) => {
+        if (e.id !== id) return e;
+        const nextSets = e.sets.filter((_, i) => i !== index);
+        return { ...e, sets: nextSets };
+      });
+      return next;
+    });
+  };
+
   const handleSelectDay = (day: number) => setDay(day);
 
   return (
@@ -50,7 +62,12 @@ export default function Home() {
       <div className="flex flex-col gap-4">
         {data[day]?.length > 0 || <div>등록된 운동 계획이 없습니다.</div>}
         {data[day]?.map((e) => (
-          <RowCard key={e.id} row={e} onAdd={handleAddRowSet} />
+          <RowCard
+            key={e.id}
+            row={e}
+            onAdd={handleAddRowSet}
+            onDelete={handleDeleteRowSet}
+          />
         ))}
       </div>
     </Container>
