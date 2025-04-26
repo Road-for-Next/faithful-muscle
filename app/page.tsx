@@ -12,8 +12,13 @@ export default function Home() {
   const [data, setData] = useState<ColumnType[]>([COLUMN_DATA]);
   const [day, setDay] = useState(new Date().getDay());
 
-  const handleAddRow = (row: RowType) => {
+  const handleAddRow = (exerciseId: string) => {
     setData((prev) => {
+      const row: RowType = {
+        id: Date.now().toString() + '-' + prev[day]?.length || '0',
+        exerciseId: exerciseId,
+        sets: [],
+      };
       const next = [...prev];
       if (next[day]) next[day] = [...next[day], row];
       else next[day] = [row];
