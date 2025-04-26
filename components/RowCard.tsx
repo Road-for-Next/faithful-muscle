@@ -10,36 +10,89 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { EXERCISE_DATA } from '@/mock/exercise';
-import { convert62to10 } from '@/lib/convertNumeralSystem';
+import { convert10to62, convert62to10 } from '@/lib/convertNumeralSystem';
 import { ChevronUp, Dumbbell, RefreshCw } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
-import { RowType } from '@/mock/column';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { RowType, SetType } from '@/mock/column';
 import { cn } from '@/lib/utils';
 import { Button } from './ui/button';
+import { Input } from './ui/input';
+import { Label } from './ui/label';
 
 interface Props {
   row: RowType;
+  onAdd: (id: string, set: SetType) => void;
 }
 
-export default function RowCard({ row }: Props) {
+interface IValue {
+  weight: string;
+  reps: string;
+}
+
+export default function RowCard({ row, onAdd }: Props) {
   const { exerciseId, sets } = row;
   const data = EXERCISE_DATA.find((e) => e.id === exerciseId);
   const bodyRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
   const [maxHeight, setMaxHeight] = useState(0);
+  const [isAdd, setIsAdd] = useState(false);
+  const [values, setValues] = useState<IValue>({
+    weight: '',
+    reps: '',
+  });
 
-  useEffect(() => {
-    if (bodyRef.current) {
-      const contentHeight = bodyRef.current.scrollHeight;
-      setMaxHeight(open ? contentHeight : 0);
+  const resetValue = () => {
+    setValues({
+      weight: '',
+      reps: '',
+    });
+  };
+
+  const toggleAdd = () => {
+    resetValue();
+    setIsAdd((prev) => !prev);
+  };
+
+  const togglebody = () => {
+    resetValue();
+    setOpen((prev) => !prev);
+    setTimeout(() => {
+      setIsAdd(false);
+    }, 150);
+  };
+
+  const handleChangeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+    setValues((prev) => ({ ...prev, [id]: value }));
+  };
+
+  const handleAddRowSet = () => {
+    // TODO - 유효성 검사 추가
+    if (!values.weight || !values.reps) {
+      alert('빈 칸을 입력해주세요');
+      return;
     }
+    const set: SetType = {
+      weight: convert10to62(Number(values.weight)),
+      reps: convert10to62(Number(values.reps)),
+    };
+    onAdd(row.id, set);
+    resetValue();
+  };
+
+  const resizeHeight = useCallback(() => {
+    if (!bodyRef.current) return;
+    const contentHeight = bodyRef.current.scrollHeight;
+    setMaxHeight(open ? contentHeight : 0);
   }, [open]);
+
+  useEffect(() => resizeHeight(), [isAdd, row.sets, resizeHeight]);
 
   return (
     <Card className="gap-0 p-3">
       <CardHeader
         className="cursor-pointer px-0 select-none"
-        onClick={() => setOpen((prev) => !prev)}
+        onClick={togglebody}
       >
         <div className="flex items-center gap-2">
           <CardTitle>{data?.ko}</CardTitle>
@@ -85,10 +138,62 @@ export default function RowCard({ row }: Props) {
             </div>
           ))}
         </CardContent>
-        <CardFooter className="mt-4 px-0">
-          <Button variant="outline" className="w-full">
-            추가하기
-          </Button>
+        <CardFooter className="mt-4 flex-col gap-4 px-0">
+          {isAdd && (
+            <div
+              className={cn(
+                'animate-fade-in transition-all duration-300',
+                'flex items-center gap-2',
+                'h-9',
+              )}
+              data-open={isAdd}
+            >
+              <div className="flex items-center gap-2">
+                <Label htmlFor="weight" className="flex items-center gap-1">
+                  <Dumbbell className="size-4" />
+                  <span className="w-7">중량</span>
+                </Label>
+                <Input
+                  id="weight"
+                  name="weight"
+                  type="number"
+                  placeholder="중량"
+                  value={values.weight}
+                  onChange={handleChangeValue}
+                />
+              </div>
+              <div className="flex items-center gap-2">
+                <Label htmlFor="reps" className="flex items-center gap-1">
+                  <RefreshCw className="size-4" />
+                  <span className="block w-7">반복</span>
+                </Label>
+                <Input
+                  id="reps"
+                  name="reps"
+                  type="number"
+                  placeholder="반복"
+                  value={values.reps}
+                  onChange={handleChangeValue}
+                />
+              </div>
+            </div>
+          )}
+          <div className="flex w-full gap-2">
+            <Button
+              variant={isAdd ? 'default' : 'outline'}
+              className="grow transition-colors duration-300"
+              onClick={isAdd ? handleAddRowSet : toggleAdd}
+            >
+              {isAdd ? '완료' : '추가하기'}
+            </Button>
+            <Button
+              variant={isAdd ? 'destructive' : 'outline'}
+              className="grow transition-colors duration-300"
+              onClick={isAdd ? toggleAdd : () => {}}
+            >
+              {isAdd ? '취소' : '수정하기'}
+            </Button>
+          </div>
         </CardFooter>
       </div>
     </Card>
