@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/card';
 import { EXERCISE_DATA } from '@/mock/exercise';
 import { convert10to62, convert62to10 } from '@/lib/convertNumeralSystem';
-import { ChevronUp, Dumbbell, RefreshCw } from 'lucide-react';
+import { ChevronUp, Dumbbell, RefreshCw, X } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { RowType, SetType } from '@/mock/column';
 import { cn } from '@/lib/utils';
@@ -22,6 +22,7 @@ import { Label } from './ui/label';
 interface Props {
   row: RowType;
   onAdd: (id: string, set: SetType) => void;
+  onDelete: (id: string, index: number) => void;
 }
 
 interface IValue {
@@ -29,7 +30,7 @@ interface IValue {
   reps: string;
 }
 
-export default function RowCard({ row, onAdd }: Props) {
+export default function RowCard({ row, onAdd, onDelete }: Props) {
   const { exerciseId, sets } = row;
   const data = EXERCISE_DATA.find((e) => e.id === exerciseId);
   const bodyRef = useRef<HTMLDivElement>(null);
@@ -80,6 +81,10 @@ export default function RowCard({ row, onAdd }: Props) {
     resetValue();
   };
 
+  const handleDeleteRowSet = (index: number) => {
+    onDelete(row.id, index);
+  };
+
   const resizeHeight = useCallback(() => {
     if (!bodyRef.current) return;
     const contentHeight = bodyRef.current.scrollHeight;
@@ -123,18 +128,24 @@ export default function RowCard({ row, onAdd }: Props) {
           className={cn('flex flex-col gap-2', 'mx-0 px-2 py-0 text-sm')}
         >
           {sets.map(({ weight, reps }, i) => (
-            <div
-              key={`${weight}-${reps}-${i}`}
-              className="flex items-center gap-4"
-            >
-              <div className="flex items-center gap-1">
-                <Dumbbell className="size-4" />
-                <span>중량 : {convert62to10(weight)}</span>
+            <div key={`${weight}-${reps}-${i}`} className="flex items-center">
+              <div className="flex grow items-center gap-4">
+                <div className="flex items-center gap-1">
+                  <Dumbbell className="size-4" />
+                  <span>중량 : {convert62to10(weight)}</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <RefreshCw className="size-4" />
+                  <span>반복 : {convert62to10(reps)}</span>
+                </div>
               </div>
-              <div className="flex items-center gap-1">
-                <RefreshCw className="size-4" />
-                <span>반복 : {convert62to10(reps)}</span>
-              </div>
+              <Button
+                className={cn('size-6 cursor-pointer')}
+                variant="ghost"
+                onClick={() => handleDeleteRowSet(i)}
+              >
+                <X className="size-4" />
+              </Button>
             </div>
           ))}
         </CardContent>
