@@ -1,9 +1,12 @@
 type SetType = { weight: string; reps: string };
-type RowType = { exerciseId: string; sets: SetType[] };
+type RowType = { id: string; exerciseId: string; sets: SetType[] };
 type ColumnType = RowType[];
+
+const now = Date.now().toString();
 
 const COLUMN_DATA: ColumnType = JSON.parse(`[
   {
+    "id" : "${now}-0",
     "exerciseId": "0",
     "sets": [
       {
@@ -17,6 +20,7 @@ const COLUMN_DATA: ColumnType = JSON.parse(`[
     ]
   },
   {
+  "id" : "${now}-1",
     "exerciseId": "1",
     "sets": [
       {
@@ -34,6 +38,7 @@ const COLUMN_DATA: ColumnType = JSON.parse(`[
     ]
   },
   {
+  "id" : "${now}-2",
     "exerciseId": "2",
     "sets": [
       {
@@ -43,6 +48,7 @@ const COLUMN_DATA: ColumnType = JSON.parse(`[
     ]
   },
   {
+  "id" : "${now}-3",
     "exerciseId": "3",
     "sets": [
       {
@@ -64,6 +70,7 @@ const COLUMN_DATA: ColumnType = JSON.parse(`[
     ]
   },
   {
+  "id" : "${now}-4",
     "exerciseId": "4",
     "sets": [
       {
@@ -77,6 +84,7 @@ const COLUMN_DATA: ColumnType = JSON.parse(`[
     ]
   },
   {
+  "id" : "${now}-5",
     "exerciseId": "5",
     "sets": [
       {
@@ -98,6 +106,7 @@ const COLUMN_DATA: ColumnType = JSON.parse(`[
     ]
   },
   {
+  "id" : "${now}-6",
     "exerciseId": "6",
     "sets": [
       {
@@ -107,6 +116,7 @@ const COLUMN_DATA: ColumnType = JSON.parse(`[
     ]
   },
   {
+  "id" : "${now}-7",
     "exerciseId": "7",
     "sets": [
       {
@@ -124,6 +134,7 @@ const COLUMN_DATA: ColumnType = JSON.parse(`[
     ]
   },
   {
+  "id" : "${now}-8",
     "exerciseId": "8",
     "sets": [
       {
@@ -137,6 +148,7 @@ const COLUMN_DATA: ColumnType = JSON.parse(`[
     ]
   },
   {
+  "id" : "${now}-9",
     "exerciseId": "9",
     "sets": [
       {

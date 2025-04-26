@@ -22,10 +22,9 @@ import {
 } from './ui/command';
 import { EXERCISE_DATA, ExerciseType } from '@/mock/exercise';
 import { Dumbbell } from 'lucide-react';
-import { RowType } from '@/mock/column';
 
 interface props {
-  onAdd: (row: RowType) => void;
+  onAdd: (exerciseId: string) => void;
 }
 
 export default function AddRowDrawer({ onAdd }: props) {
@@ -34,11 +33,10 @@ export default function AddRowDrawer({ onAdd }: props) {
   const [able, setAble] = useState(true);
   const closerRef = useRef<HTMLButtonElement>(null);
 
-  const handleSelectExercise = (id: string) => {
+  const handleSelectExercise = (exerciseId: string) => {
     if (able) {
       setAble(false);
-      const row: RowType = { exerciseId: id, sets: [] };
-      onAdd(row);
+      onAdd(exerciseId);
     }
     closerRef.current?.click();
   };
