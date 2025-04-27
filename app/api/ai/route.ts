@@ -6,7 +6,6 @@ export async function POST(request: Request) {
 
   if (!data)
     return NextResponse.json({ error: '데이터가 없습니다.' }, { status: 422 });
-
   try {
     const result = await generateFeedback(data);
     return NextResponse.json(result);
