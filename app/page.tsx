@@ -10,6 +10,29 @@ import DaySelector from '@/components/DaySelector';
 import { Button } from '@/components/ui/button';
 import { BotMessageSquare } from 'lucide-react';
 import { createFeedBack } from '@/service/ai.api';
+import { EXERCISE_DATA } from '@/mock/exercise';
+import { convert62to10 } from '@/lib/convertNumeralSystem';
+
+type PromptType = {
+  name: string;
+  sets: { weight: number; reps: number }[];
+}[];
+
+const makePrompt = (data: ColumnType) => {
+  const prompt: PromptType = [];
+  data?.forEach(({ exerciseId, sets }) => {
+    const exercise = EXERCISE_DATA.find((e) => e.id === exerciseId);
+    if (!exercise) return;
+    prompt.push({
+      name: exercise.ko,
+      sets: sets.map((e) => ({
+        weight: convert62to10(e.weight),
+        reps: convert62to10(e.reps),
+      })),
+    });
+  });
+  return prompt;
+};
 
 export default function Home() {
   const [data, setData] = useState<ColumnType[]>([COLUMN_DATA]);
@@ -52,8 +75,10 @@ export default function Home() {
   };
 
   const handleClickGenerate = async () => {
-    const text = prompt('프롬프트를 입력해주세요');
-    if (!text) return;
+    const prompt = makePrompt(data[day]);
+    if (!prompt || prompt.length === 0)
+      return alert('등록된 운동 계획이 없습니다.');
+    const text = JSON.stringify(prompt);
     await createFeedBack(text).then((result) => console.log(result));
   };
 
