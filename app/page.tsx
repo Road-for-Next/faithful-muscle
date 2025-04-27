@@ -8,7 +8,7 @@ import AddRowDrawer from '@/components/AddRowDrawer';
 import { useState } from 'react';
 import DaySelector from '@/components/DaySelector';
 import { Button } from '@/components/ui/button';
-import { BotMessageSquare } from 'lucide-react';
+import { BotMessageSquare, LoaderCircle } from 'lucide-react';
 import { createFeedBack } from '@/service/ai.api';
 import { EXERCISE_DATA } from '@/mock/exercise';
 import { convert62to10 } from '@/lib/convertNumeralSystem';
@@ -37,6 +37,7 @@ const makePrompt = (data: ColumnType) => {
 export default function Home() {
   const [data, setData] = useState<ColumnType[]>([COLUMN_DATA]);
   const [day, setDay] = useState(new Date().getDay());
+  const [isCooldown, setIsCooldown] = useState(false);
 
   const handleAddRow = (exerciseId: string) => {
     setData((prev) => {
@@ -75,11 +76,17 @@ export default function Home() {
   };
 
   const handleClickGenerate = async () => {
+    if (isCooldown) return;
+
     const prompt = makePrompt(data[day]);
     if (!prompt || prompt.length === 0)
       return alert('등록된 운동 계획이 없습니다.');
+
+    setIsCooldown(true);
+
     const text = JSON.stringify(prompt);
     await createFeedBack(text).then((result) => console.log(result));
+    setTimeout(() => setIsCooldown(false), 10000);
   };
 
   const handleSelectDay = (day: number) => setDay(day);
@@ -95,7 +102,11 @@ export default function Home() {
             variant="outline"
             onClick={handleClickGenerate}
           >
-            <BotMessageSquare className="size-4" />
+            {isCooldown ? (
+              <LoaderCircle className="size-4 animate-spin" />
+            ) : (
+              <BotMessageSquare className="size-4" />
+            )}
           </Button>
           <AddRowDrawer onAdd={handleAddRow} />
         </div>
