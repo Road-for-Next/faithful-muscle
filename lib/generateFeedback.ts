@@ -9,12 +9,12 @@ export default async function generateFeedback(text: string) {
     throw new Error('Input text is empty or invalid.');
   }
 
-  const prompt = text;
+  const prompt = `다음 계획을 보고 하루 운동 루틴에 대해 적절하게 운동을 선택, 정렬, 강도 설정 했는지에 대해서만 짧은 피드백 해줘. 무게 단위는 kg : ${text}`;
 
   try {
     const genAI = new GoogleGenAI({ apiKey: key });
     const response = await genAI.models.generateContent({
-      model: 'gemini-2.0-flash',
+      model: 'gemini-2.0-flash-lite',
       contents: prompt,
     });
 
