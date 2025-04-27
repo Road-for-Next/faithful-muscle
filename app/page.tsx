@@ -7,6 +7,9 @@ import { COLUMN_DATA, ColumnType, RowType, SetType } from '@/mock/column';
 import AddRowDrawer from '@/components/AddRowDrawer';
 import { useState } from 'react';
 import DaySelector from '@/components/DaySelector';
+import { Button } from '@/components/ui/button';
+import { BotMessageSquare } from 'lucide-react';
+import { createFeedBack } from '@/service/ai.api';
 
 export default function Home() {
   const [data, setData] = useState<ColumnType[]>([COLUMN_DATA]);
@@ -48,6 +51,12 @@ export default function Home() {
     });
   };
 
+  const handleClickGenerate = async () => {
+    const text = prompt('프롬프트를 입력해주세요');
+    if (!text) return;
+    await createFeedBack(text).then((result) => console.log(result));
+  };
+
   const handleSelectDay = (day: number) => setDay(day);
 
   return (
@@ -56,6 +65,13 @@ export default function Home() {
         <DaySelector day={day} onSelect={handleSelectDay} />
         <div className="flex items-center gap-2">
           <ThemeSelector />
+          <Button
+            className="size-9 p-0"
+            variant="outline"
+            onClick={handleClickGenerate}
+          >
+            <BotMessageSquare className="size-4" />
+          </Button>
           <AddRowDrawer onAdd={handleAddRow} />
         </div>
       </div>
