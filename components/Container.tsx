@@ -10,7 +10,7 @@ const Container = React.forwardRef<HTMLDivElement, ContainerProps>(
     return (
       <div
         className={cn(
-          'max-w-m-max min-w-m-min mx-auto min-h-svh p-4',
+          'bg-background max-w-m-max min-w-m-min mx-auto min-h-svh p-4',
           className,
         )}
         ref={ref}
