@@ -8,37 +8,13 @@ import AddRowDrawer from '@/components/AddRowDrawer';
 import { useState } from 'react';
 import DaySelector from '@/components/DaySelector';
 import { Button } from '@/components/ui/button';
-import { BotMessageSquare, Copy, LoaderCircle } from 'lucide-react';
-import { createFeedBack } from '@/service/ai.api';
-import { EXERCISE_DATA } from '@/mock/exercise';
-import { convert62to10 } from '@/lib/convertNumeralSystem';
 import { encodeColumnToQuery } from '@/lib/codecColumn';
-
-type PromptType = {
-  name: string;
-  sets: { weight: number; reps: number }[];
-}[];
-
-const makePrompt = (data: ColumnType) => {
-  const prompt: PromptType = [];
-  data?.forEach(({ exerciseId, sets }) => {
-    const exercise = EXERCISE_DATA.find((e) => e.id === exerciseId);
-    if (!exercise) return;
-    prompt.push({
-      name: exercise.ko,
-      sets: sets.map((e) => ({
-        weight: convert62to10(e.weight),
-        reps: convert62to10(e.reps),
-      })),
-    });
-  });
-  return prompt;
-};
+import FeedbackDrawer from '@/components/FeedbackDrawer';
+import { Copy } from 'lucide-react';
 
 export default function Home() {
   const [data, setData] = useState<ColumnType[]>([COLUMN_DATA]);
   const [day, setDay] = useState(new Date().getDay());
-  const [isCooldown, setIsCooldown] = useState(false);
 
   const handleClickCopy = async () => {
     if (!data[day] || data[day]?.length === 0)
@@ -95,20 +71,6 @@ export default function Home() {
     });
   };
 
-  const handleClickGenerate = async () => {
-    if (isCooldown) return;
-
-    const prompt = makePrompt(data[day]);
-    if (!prompt || prompt.length === 0)
-      return alert('등록된 운동 계획이 없습니다.');
-
-    setIsCooldown(true);
-
-    const text = JSON.stringify(prompt);
-    await createFeedBack(text).then((result) => console.log(result));
-    setTimeout(() => setIsCooldown(false), 10000);
-  };
-
   const handleSelectDay = (day: number) => setDay(day);
 
   return (
@@ -124,17 +86,7 @@ export default function Home() {
           >
             <Copy className="size-4" />
           </Button>
-          <Button
-            className="size-9 p-0"
-            variant="outline"
-            onClick={handleClickGenerate}
-          >
-            {isCooldown ? (
-              <LoaderCircle className="size-4 animate-spin" />
-            ) : (
-              <BotMessageSquare className="size-4" />
-            )}
-          </Button>
+          <FeedbackDrawer column={data[day] || []} />
           <AddRowDrawer onAdd={handleAddRow} />
         </div>
       </div>
