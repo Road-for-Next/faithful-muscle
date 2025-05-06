@@ -1,15 +1,30 @@
 import { GoogleGenAI } from '@google/genai';
 
-export default async function generateFeedback(text: string) {
+interface IData {
+  routine: string;
+  option: {
+    sequence: boolean;
+    strength: boolean;
+    exercise: boolean;
+  };
+}
+
+export default async function generateFeedback(data: IData) {
   const key = process.env.GEMINI_API_KEY;
 
   if (!key) throw new Error('The key does not exist.');
 
-  if (!text || text.trim().length === 0) {
+  if (!data) throw new Error('Input data is empty or invalid.');
+
+  const { routine, option } = data;
+
+  if (!routine || routine.trim().length === 0) {
     throw new Error('Input text is empty or invalid.');
   }
 
-  const prompt = `다음 계획을 보고 하루 운동 루틴에 대해 적절하게 운동을 선택, 정렬, 강도 설정 했는지에 대해서만 짧은 피드백 해줘. 무게 단위는 kg : ${text}`;
+  console.dir(option);
+
+  const prompt = `다음 계획을 보고 하루 운동 루틴에 대해 적절하게 운동을 선택, 정렬, 강도 설정 했는지에 대해서만 짧은 피드백 해줘. 무게 단위는 kg 루틴 : ${routine}`;
 
   try {
     const genAI = new GoogleGenAI({ apiKey: key });
