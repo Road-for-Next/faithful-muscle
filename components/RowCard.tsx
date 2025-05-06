@@ -22,6 +22,7 @@ import { Label } from './ui/label';
 interface Props {
   row: RowType;
   onAdd: (id: string, set: SetType) => void;
+  onEdit: () => void;
   onDelete: (id: string, index: number) => void;
 }
 
@@ -30,13 +31,14 @@ interface IValue {
   reps: string;
 }
 
-export default function RowCard({ row, onAdd, onDelete }: Props) {
+export default function RowCard({ row, onAdd, onEdit, onDelete }: Props) {
   const { exerciseId, sets } = row;
   const data = EXERCISE_DATA.find((e) => e.id === exerciseId);
   const bodyRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
   const [maxHeight, setMaxHeight] = useState(0);
   const [isAdd, setIsAdd] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
   const [values, setValues] = useState<IValue>({
     weight: '',
     reps: '',
@@ -52,6 +54,12 @@ export default function RowCard({ row, onAdd, onDelete }: Props) {
   const toggleAdd = () => {
     resetValue();
     setIsAdd((prev) => !prev);
+    setIsEdit(false);
+  };
+
+  const toggleEdit = () => {
+    setIsEdit((prev) => !prev);
+    setIsAdd(false);
   };
 
   const togglebody = () => {
@@ -79,6 +87,10 @@ export default function RowCard({ row, onAdd, onDelete }: Props) {
     };
     onAdd(row.id, set);
     resetValue();
+  };
+
+  const handleEditRow = () => {
+    onEdit();
   };
 
   const handleDeleteRowSet = (index: number) => {
@@ -191,18 +203,26 @@ export default function RowCard({ row, onAdd, onDelete }: Props) {
           )}
           <div className="flex w-full gap-2">
             <Button
-              variant={isAdd ? 'default' : 'outline'}
-              className="grow transition-colors duration-300"
-              onClick={isAdd ? handleAddRowSet : toggleAdd}
+              variant={isAdd || isEdit ? 'default' : 'outline'}
+              className="grow basis-1 transition-colors duration-300"
+              onClick={
+                isAdd || isEdit
+                  ? isAdd
+                    ? handleAddRowSet
+                    : handleEditRow
+                  : toggleAdd
+              }
             >
-              {isAdd ? '완료' : '추가하기'}
+              {isAdd && '추가하기'}
+              {isEdit && '수정하기'}
+              {!isAdd && !isEdit && '추가'}
             </Button>
             <Button
-              variant={isAdd ? 'destructive' : 'outline'}
-              className="grow transition-colors duration-300"
-              onClick={isAdd ? toggleAdd : () => {}}
+              variant={isAdd || isEdit ? 'destructive' : 'outline'}
+              className="grow basis-1 transition-colors duration-300"
+              onClick={isAdd ? toggleAdd : toggleEdit}
             >
-              {isAdd ? '취소' : '수정하기'}
+              {isAdd || isEdit ? '취소' : '수정'}
             </Button>
           </div>
         </CardFooter>

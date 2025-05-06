@@ -93,6 +93,7 @@ export default function Home() {
             key={e.id}
             row={e}
             onAdd={handleAddRowSet}
+            onEdit={() => alert('수정')}
             onDelete={handleDeleteRowSet}
           />
         ))}
