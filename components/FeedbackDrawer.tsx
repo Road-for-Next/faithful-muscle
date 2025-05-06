@@ -67,23 +67,27 @@ export default function FeedbackDrawer({ column }: Props) {
       </DrawerTrigger>
       <DrawerContent className="max-w-m-max min-w-m-min mx-auto h-[80vh]">
         <DrawerHeader className="pb-2">
-          <DrawerTitle>Feedback</DrawerTitle>
+          <DrawerTitle>
+            <span>피드백 생성하기</span>
+          </DrawerTitle>
           <DrawerDescription className="text-xs">
-            Provide AI Feedback
+            AI 피드백을 생성해보세요!
           </DrawerDescription>
         </DrawerHeader>
 
-        <Button
-          className="size-9 p-0"
-          variant="outline"
-          onClick={handleClickGenerate}
-        >
-          {isCooldown ? (
-            <LoaderCircle className="size-4 animate-spin" />
-          ) : (
-            <BotMessageSquare className="size-4" />
-          )}
-        </Button>
+        <div className="p-3">
+          <Button
+            className="size-9 p-0"
+            variant="outline"
+            onClick={handleClickGenerate}
+          >
+            {isCooldown ? (
+              <LoaderCircle className="size-4 animate-spin" />
+            ) : (
+              <BotMessageSquare className="size-4" />
+            )}
+          </Button>
+        </div>
 
         <DrawerFooter>
           <DrawerClose asChild>
