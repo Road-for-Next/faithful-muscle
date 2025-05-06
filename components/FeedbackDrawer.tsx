@@ -1,4 +1,4 @@
-import { BotMessageSquare, LoaderCircle } from 'lucide-react';
+import { BotMessageSquare, ListFilter, LoaderCircle } from 'lucide-react';
 import { Button } from './ui/button';
 import {
   Drawer,
@@ -10,19 +10,19 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from './ui/drawer';
-import { useState } from 'react';
+import { MouseEvent, useState } from 'react';
 import { ColumnType } from '@/mock/column';
 import { EXERCISE_DATA } from '@/mock/exercise';
 import { convert62to10 } from '@/lib/convertNumeralSystem';
 import { createFeedBack } from '@/service/ai.api';
 
-type PromptType = {
+type RoutineType = {
   name: string;
   sets: { weight: number; reps: number }[];
 }[];
 
-const makePrompt = (data: ColumnType) => {
-  const prompt: PromptType = [];
+const makeRoutine = (data: ColumnType) => {
+  const prompt: RoutineType = [];
   data?.forEach(({ exerciseId, sets }) => {
     const exercise = EXERCISE_DATA.find((e) => e.id === exerciseId);
     if (!exercise) return;
@@ -37,24 +37,45 @@ const makePrompt = (data: ColumnType) => {
   return prompt;
 };
 
+interface IOption {
+  sequence: boolean;
+  strength: boolean;
+  exercise: boolean;
+}
+
 interface Props {
   column: ColumnType;
 }
 
 export default function FeedbackDrawer({ column }: Props) {
   const [isCooldown, setIsCooldown] = useState(false);
+  const [option, setOption] = useState<IOption>({
+    sequence: false,
+    strength: false,
+    exercise: false,
+  });
+
+  const handleClickOption = (e: MouseEvent<HTMLButtonElement>) => {
+    const name = e.currentTarget.name as 'sequence' | 'strength' | 'exercise';
+    if (!name) return;
+    setOption((prev) => ({ ...prev, [name]: !prev[name] }));
+  };
 
   const handleClickGenerate = async () => {
     if (isCooldown) return;
 
-    const prompt = makePrompt(column);
-    if (!prompt || prompt.length === 0)
+    const routine = JSON.stringify(makeRoutine(column));
+    if (!routine || routine.length === 0)
       return alert('등록된 운동 계획이 없습니다.');
 
     setIsCooldown(true);
 
-    const text = JSON.stringify(prompt);
-    await createFeedBack(text).then((result) => console.log(result));
+    const body = {
+      routine,
+      option,
+    };
+
+    await createFeedBack(body).then((result) => console.log(result));
     setTimeout(() => setIsCooldown(false), 10000);
   };
 
@@ -75,16 +96,46 @@ export default function FeedbackDrawer({ column }: Props) {
           </DrawerDescription>
         </DrawerHeader>
 
-        <div className="p-3">
+        <div className="flex flex-col gap-4 p-3">
+          <div className="px-1">
+            <h3 className="mb-2 flex items-center gap-1 text-sm font-semibold">
+              <ListFilter className="size-4" /> <span>피드백 옵션</span>
+            </h3>
+            <div className="flex gap-2">
+              <Button
+                name="sequence"
+                className="grow"
+                variant={option.sequence ? 'default' : 'outline'}
+                onClick={handleClickOption}
+              >
+                운동 순서
+              </Button>
+              <Button
+                name="strength"
+                className="grow"
+                variant={option.strength ? 'default' : 'outline'}
+                onClick={handleClickOption}
+              >
+                운동 강도
+              </Button>
+              <Button
+                name="exercise"
+                className="grow"
+                variant={option.exercise ? 'default' : 'outline'}
+                onClick={handleClickOption}
+              >
+                운동 선택
+              </Button>
+            </div>
+          </div>
           <Button
-            className="size-9 p-0"
-            variant="outline"
+            variant={isCooldown ? 'ghost' : 'default'}
             onClick={handleClickGenerate}
           >
             {isCooldown ? (
               <LoaderCircle className="size-4 animate-spin" />
             ) : (
-              <BotMessageSquare className="size-4" />
+              <span>Generate</span>
             )}
           </Button>
         </div>
