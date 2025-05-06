@@ -8,10 +8,11 @@ import AddRowDrawer from '@/components/AddRowDrawer';
 import { useState } from 'react';
 import DaySelector from '@/components/DaySelector';
 import { Button } from '@/components/ui/button';
-import { BotMessageSquare, LoaderCircle } from 'lucide-react';
+import { BotMessageSquare, Copy, LoaderCircle } from 'lucide-react';
 import { createFeedBack } from '@/service/ai.api';
 import { EXERCISE_DATA } from '@/mock/exercise';
 import { convert62to10 } from '@/lib/convertNumeralSystem';
+import { encodeColumnToQuery } from '@/lib/codecColumn';
 
 type PromptType = {
   name: string;
@@ -38,6 +39,25 @@ export default function Home() {
   const [data, setData] = useState<ColumnType[]>([COLUMN_DATA]);
   const [day, setDay] = useState(new Date().getDay());
   const [isCooldown, setIsCooldown] = useState(false);
+
+  const handleClickCopy = async () => {
+    if (!data[day] || data[day]?.length === 0)
+      return alert('등록된 운동 계획이 없습니다.');
+
+    const text = encodeColumnToQuery(data[day]);
+
+    try {
+      if (text) {
+        await navigator.clipboard.writeText(text);
+        console.log(text);
+      } else {
+        alert('클립보드에 복사되었습니다.');
+        console.log('복사할 데이터가 없습니다.');
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   const handleAddRow = (exerciseId: string) => {
     setData((prev) => {
@@ -97,6 +117,9 @@ export default function Home() {
         <DaySelector day={day} onSelect={handleSelectDay} />
         <div className="flex items-center gap-2">
           <ThemeSelector />
+          <Button variant="outline" onClick={handleClickCopy}>
+            <Copy className="size-4" />
+          </Button>
           <Button
             className="size-9 p-0"
             variant="outline"
