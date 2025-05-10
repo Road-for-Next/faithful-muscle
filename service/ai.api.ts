@@ -1,6 +1,15 @@
 import instance from '@/service/axios';
 
-const createFeedBack = async (data: string) => {
+interface IData {
+  routine: string;
+  option: {
+    sequence: boolean;
+    strength: boolean;
+    exercise: boolean;
+  };
+}
+
+const createFeedBack = async (data: IData) => {
   const response = await instance.post('/ai', { data });
   return response.data;
 };
