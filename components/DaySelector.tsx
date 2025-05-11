@@ -7,16 +7,17 @@ import {
 import { DAYS } from '@/constants/day';
 import { ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import useDay from '@/hooks/useDay';
+import useDayStore from '@/stores/useDay.store';
 
 export default function DaySelector() {
-  const { setDay, Day } = useDay();
+  const day = useDayStore((state) => state.day);
+  const setDay = useDayStore((state) => state.setDay);
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" className="flex">
-          <span>{Day.ko}</span>
+          <span>{DAYS[day].ko}</span>
           <ChevronDown className="size-4" />
         </Button>
       </DropdownMenuTrigger>

@@ -11,8 +11,9 @@ const S_LENGTH = W_LENGTH + R_LENGTH; // 인코딩 set 길이
 const MIN_WEIGHT_LENGTH = 1; // weight의 최소 길이
 const MIN_REPS_LENGTH = 1; // reps의 최소 길이
 const ROW_DIVISION = '.'; // 인코딩 문자열 row 구분자
+const DAY_DIVISION = '~'; // 인코딩 문자열 day 구분자
 
-const encodeColumnToQuery = (column: ColumnType) => {
+const encodeColumnToQuery = (day: number, column: ColumnType) => {
   const result: string[] = column.map((row) => {
     const { exerciseId, sets } = row;
     const ss: string[] = sets.map((set) => {
@@ -23,13 +24,14 @@ const encodeColumnToQuery = (column: ColumnType) => {
     });
     return exerciseId + ss.join('');
   });
-  return btoa(result.join(ROW_DIVISION));
+  return btoa(day + DAY_DIVISION + result.join(ROW_DIVISION));
 };
 
 const decodeQueryToColumn = (query: string) => {
   const now = Date.now().toString();
-  const temp = atob(query).split(ROW_DIVISION);
-  const result: ColumnType = temp.map((e, index) => {
+  const [day, temp] = atob(query).split(DAY_DIVISION);
+  const col = temp.split(ROW_DIVISION);
+  const column: ColumnType = col.map((e, index) => {
     const exerciseId = e.slice(0, e.length % S_LENGTH);
     const ss = e.slice(e.length % S_LENGTH);
     const sets: SetType[] = [];
@@ -43,7 +45,7 @@ const decodeQueryToColumn = (query: string) => {
     }
     return { id: `${now}-${index}`, exerciseId, sets } as RowType;
   });
-  return result;
+  return { day, column };
 };
 
 export { encodeColumnToQuery, decodeQueryToColumn };

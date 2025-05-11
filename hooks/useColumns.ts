@@ -1,12 +1,11 @@
-import { ColumnType, RowType, SetType } from '@/mock/column';
-import useDay from './useDay';
+import { COLUMN_DATA, ColumnType, RowType, SetType } from '@/mock/column';
 import useColumnsStore from '@/stores/useColumns.store';
 import { useCallback, useEffect } from 'react';
-import { encodeColumnToQuery } from '@/lib/codecColumn';
+import useDayStore from '@/stores/useDay.store';
 
 const useColumns = () => {
   const { columns, setColumns } = useColumnsStore((state) => state);
-  const { day } = useDay();
+  const day = useDayStore((state) => state.day);
 
   const column = columns[day];
 
@@ -49,12 +48,7 @@ const useColumns = () => {
     setColumns(next);
   };
 
-  useEffect(() => {
-    if (column) {
-      const query = encodeColumnToQuery(column);
-      window.history.pushState({}, '', '?q=' + query);
-    }
-  }, [column]);
+  useEffect(() => setColumns([COLUMN_DATA]), [setColumns]);
 
   return {
     column,
