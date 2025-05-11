@@ -1,6 +1,8 @@
 import { ColumnType, RowType, SetType } from '@/mock/column';
 import useDay from './useDay';
 import useColumnsStore from '@/stores/useColumns.store';
+import { useCallback, useEffect } from 'react';
+import { encodeColumnToQuery } from '@/lib/codecColumn';
 
 const useColumns = () => {
   const { columns, setColumns } = useColumnsStore((state) => state);
@@ -8,11 +10,14 @@ const useColumns = () => {
 
   const column = columns[day];
 
-  const setColumn = (column: ColumnType) => {
-    const next = [...columns];
-    next[day] = column;
-    setColumns(next);
-  };
+  const setColumn = useCallback(
+    (column: ColumnType) => {
+      const next = [...columns];
+      next[day] = column;
+      setColumns(next);
+    },
+    [columns, day, setColumns],
+  );
 
   const createRow = (exerciseId: string) => {
     const row: RowType = {
@@ -43,6 +48,13 @@ const useColumns = () => {
     });
     setColumns(next);
   };
+
+  useEffect(() => {
+    if (column) {
+      const query = encodeColumnToQuery(column);
+      window.history.pushState({}, '', '?q=' + query);
+    }
+  }, [column]);
 
   return {
     column,
