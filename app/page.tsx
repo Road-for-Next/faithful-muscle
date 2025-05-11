@@ -11,10 +11,11 @@ import { Button } from '@/components/ui/button';
 import { encodeColumnToQuery } from '@/lib/codecColumn';
 import FeedbackDrawer from '@/components/FeedbackDrawer';
 import { Copy } from 'lucide-react';
+import useDay from '@/hooks/useDay';
 
 export default function Home() {
   const [data, setData] = useState<ColumnType[]>([COLUMN_DATA]);
-  const [day, setDay] = useState(new Date().getDay());
+  const { day } = useDay();
 
   const handleClickCopy = async () => {
     if (!data[day] || data[day]?.length === 0)
@@ -71,12 +72,10 @@ export default function Home() {
     });
   };
 
-  const handleSelectDay = (day: number) => setDay(day);
-
   return (
     <Container>
       <div className="mb-4 flex items-center justify-between">
-        <DaySelector day={day} onSelect={handleSelectDay} />
+        <DaySelector />
         <div className="flex items-center gap-2">
           <ThemeSelector />
           <Button
