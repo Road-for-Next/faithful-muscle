@@ -6,7 +6,9 @@ type State = {
   columns: ColumnType[];
 };
 
-type Actions = { setColumns: (columns: ColumnType[]) => void };
+type Actions = {
+  setColumns: (columns: ColumnType[]) => void;
+};
 
 const useColumnsStore = create<State & Actions>()(
   persist(

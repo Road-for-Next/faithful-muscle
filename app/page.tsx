@@ -11,7 +11,7 @@ import { Copy } from 'lucide-react';
 import useColumns from '@/hooks/useColumns';
 
 export default function Home() {
-  const { column } = useColumns();
+  const { column, createRow, createRowSet, deleteRowSet } = useColumns();
 
   const handleClickCopy = async () => {
     if (!column || column?.length === 0)
@@ -45,13 +45,20 @@ export default function Home() {
           >
             <Copy className="size-4" />
           </Button>
-          <FeedbackDrawer />
-          <AddRowDrawer />
+          <FeedbackDrawer column={column} />
+          <AddRowDrawer createRow={createRow} />
         </div>
       </div>
       <div className="flex flex-col gap-4">
         {column?.length > 0 || <div>등록된 운동 계획이 없습니다.</div>}
-        {column?.map((e) => <RowCard key={e.id} row={e} />)}
+        {column?.map((e) => (
+          <RowCard
+            key={e.id}
+            row={e}
+            createRowSet={createRowSet}
+            deleteRowSet={deleteRowSet}
+          />
+        ))}
       </div>
     </Container>
   );

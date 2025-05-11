@@ -18,10 +18,11 @@ import { cn } from '@/lib/utils';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
-import useColumns from '@/hooks/useColumns';
 
 interface Props {
   row: RowType;
+  createRowSet: (id: string, set: SetType) => void;
+  deleteRowSet: (id: string, index: number) => void;
 }
 
 interface IValue {
@@ -29,8 +30,7 @@ interface IValue {
   reps: string;
 }
 
-export default function RowCard({ row }: Props) {
-  const { createRowSet, deleteRowSet } = useColumns();
+export default function RowCard({ row, createRowSet, deleteRowSet }: Props) {
   const { exerciseId, sets } = row;
   const data = EXERCISE_DATA.find((e) => e.id === exerciseId);
   const bodyRef = useRef<HTMLDivElement>(null);

@@ -13,10 +13,12 @@ import {
 import { EXERCISE_DATA, ExerciseType } from '@/mock/exercise';
 import { Dumbbell } from 'lucide-react';
 import DrawerElement from './DrawerElement';
-import useColumns from '@/hooks/useColumns';
 
-export default function AddRowDrawer() {
-  const { createRow } = useColumns();
+interface Props {
+  createRow: (exerciseId: string) => void;
+}
+
+export default function AddRowDrawer({ createRow }: Props) {
   const [enable, setEnable] = useState(true);
   const closerRef = useRef<HTMLButtonElement>(null);
 

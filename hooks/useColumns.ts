@@ -1,6 +1,6 @@
-import { COLUMN_DATA, ColumnType, RowType, SetType } from '@/mock/column';
+import { ColumnType, RowType, SetType } from '@/mock/column';
 import useColumnsStore from '@/stores/useColumns.store';
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 import useDayStore from '@/stores/useDay.store';
 
 const useColumns = () => {
@@ -48,10 +48,9 @@ const useColumns = () => {
     setColumns(next);
   };
 
-  useEffect(() => setColumns([COLUMN_DATA]), [setColumns]);
-
   return {
     column,
+    columns,
     setColumn,
     createRow,
     createRowSet,
