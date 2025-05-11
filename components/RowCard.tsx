@@ -18,11 +18,10 @@ import { cn } from '@/lib/utils';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
+import useColumns from '@/hooks/useColumns';
 
 interface Props {
   row: RowType;
-  onAdd: (id: string, set: SetType) => void;
-  onDelete: (id: string, index: number) => void;
 }
 
 interface IValue {
@@ -30,7 +29,8 @@ interface IValue {
   reps: string;
 }
 
-export default function RowCard({ row, onAdd, onDelete }: Props) {
+export default function RowCard({ row }: Props) {
+  const { createRowSet, deleteRowSet } = useColumns();
   const { exerciseId, sets } = row;
   const data = EXERCISE_DATA.find((e) => e.id === exerciseId);
   const bodyRef = useRef<HTMLDivElement>(null);
@@ -77,12 +77,12 @@ export default function RowCard({ row, onAdd, onDelete }: Props) {
       weight: convert10to62(Number(values.weight)),
       reps: convert10to62(Number(values.reps)),
     };
-    onAdd(row.id, set);
+    createRowSet(row.id, set);
     resetValue();
   };
 
   const handleDeleteRowSet = (index: number) => {
-    onDelete(row.id, index);
+    deleteRowSet(row.id, index);
   };
 
   const resizeHeight = useCallback(() => {

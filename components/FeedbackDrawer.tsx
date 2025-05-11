@@ -7,6 +7,7 @@ import { EXERCISE_DATA } from '@/mock/exercise';
 import { convert62to10 } from '@/lib/convertNumeralSystem';
 import { createFeedBack } from '@/service/ai.api';
 import DrawerElement from './DrawerElement';
+import useColumns from '@/hooks/useColumns';
 
 type RoutineType = {
   name: string;
@@ -15,11 +16,8 @@ type RoutineType = {
 
 type OptionType = 'sequence' | 'strength' | 'exercise';
 
-interface Props {
-  column: ColumnType;
-}
-
-export default function FeedbackDrawer({ column }: Props) {
+export default function FeedbackDrawer() {
+  const { column } = useColumns();
   const [isCooldown, setIsCooldown] = useState(false);
   const [option, setOption] = useState<Record<OptionType, boolean>>({
     sequence: false,
@@ -32,6 +30,7 @@ export default function FeedbackDrawer({ column }: Props) {
 
   const handleClickGenerate = async () => {
     if (isCooldown) return;
+    if (!column) return;
 
     const routine = JSON.stringify(makeRoutine(column));
     if (!routine || routine.length === 0)
