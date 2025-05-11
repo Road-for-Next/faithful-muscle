@@ -27,8 +27,9 @@ const encodeColumnToQuery = (column: ColumnType) => {
 };
 
 const decodeQueryToColumn = (query: string) => {
+  const now = Date.now().toString();
   const temp = atob(query).split(ROW_DIVISION);
-  const result: ColumnType = temp.map((e) => {
+  const result: ColumnType = temp.map((e, index) => {
     const exerciseId = e.slice(0, e.length % S_LENGTH);
     const ss = e.slice(e.length % S_LENGTH);
     const sets: SetType[] = [];
@@ -40,7 +41,7 @@ const decodeQueryToColumn = (query: string) => {
       const reps = r[0] === '0' ? r[MIN_REPS_LENGTH] : r;
       sets.push({ weight, reps });
     }
-    return { exerciseId, sets } as RowType;
+    return { id: `${now}-${index}`, exerciseId, sets } as RowType;
   });
   return result;
 };
