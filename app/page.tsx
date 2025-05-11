@@ -6,7 +6,6 @@ import RowCard from '@/components/RowCard';
 import AddRowDrawer from '@/components/AddRowDrawer';
 import DaySelector from '@/components/DaySelector';
 import { Button } from '@/components/ui/button';
-import { encodeColumnToQuery } from '@/lib/codecColumn';
 import FeedbackDrawer from '@/components/FeedbackDrawer';
 import { Copy } from 'lucide-react';
 import useColumns from '@/hooks/useColumns';
@@ -18,7 +17,7 @@ export default function Home() {
     if (!column || column?.length === 0)
       return alert('등록된 운동 계획이 없습니다.');
 
-    const text = encodeColumnToQuery(column);
+    const text = location.href;
 
     try {
       if (text) {
