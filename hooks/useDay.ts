@@ -1,35 +1,29 @@
-import { useState } from 'react';
+import { DAYS } from '@/constants/day';
+import useDayStore from '@/stores/useDay.store';
+import { useEffect } from 'react';
 
-type Day = 'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun';
-
-const DAY_LIST: Day[] = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
-
-const initializeDay = () => DAY_LIST[new Date().getDay()];
+// 오늘의 요일을 반환하는 함수
+const initializeDay = () => new Date().getDay();
 
 /**
- * 요일 관리 커스텀 훅
- * @property day - 선택된 요일 / 기본값 오늘의 요일
- * @property setDay - 요일 변경
+ * @property day - 요일 인덱스 0(일요일) ~ 6(토요일)
+ * @property setDat - 요일 선택 함수
+ * @property Day - 요일 객체 / DAYS[day]와 동일
  */
-const useDay = () => {
-  const [day, set] = useState<Day>(() => initializeDay());
+const useDay = (initialDay?: number) => {
+  const { day, setDay } = useDayStore((state) => state);
 
-  const setDay = (param?: number | Day) => {
-    switch (typeof param) {
-      case 'number':
-        if (param < 0 || param > 6) return;
-        set(DAY_LIST[param]);
-        break;
-      case 'string':
-        set(param as Day);
-        break;
-      default:
-        set(initializeDay());
-    }
+  const _setDay = (day: number) => {
+    if (day >= 0 && day <= 6) setDay(day);
+    else throw Error('Day must be between 0 and 6');
   };
 
-  return { day, setDay };
+  useEffect(() => {
+    if (initialDay) setDay(initialDay);
+    else setDay(initializeDay());
+  }, [initialDay, setDay]);
+
+  return { day, setDay: _setDay, Day: DAYS[day] };
 };
 
-export type { Day };
-export { useDay, DAY_LIST };
+export default useDay;
