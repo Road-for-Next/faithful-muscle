@@ -10,7 +10,6 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { EXERCISE_DATA } from '@/mock/exercise';
-import { convert10to62, convert62to10 } from '@/lib/convertNumeralSystem';
 import { ChevronUp, Dumbbell, RefreshCw, X } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { RowType, SetType } from '@/mock/column';
@@ -63,8 +62,8 @@ export default function RowCard({ row, createRowSet, deleteRowSet }: Props) {
   };
 
   const handleChangeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { id, value } = e.target;
-    setValues((prev) => ({ ...prev, [id]: value }));
+    const { name, value } = e.target;
+    setValues((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleAddRowSet = () => {
@@ -74,15 +73,11 @@ export default function RowCard({ row, createRowSet, deleteRowSet }: Props) {
       return;
     }
     const set: SetType = {
-      weight: convert10to62(Number(values.weight)),
-      reps: convert10to62(Number(values.reps)),
+      weight: Number(values.weight),
+      reps: Number(values.reps),
     };
     createRowSet(row.id, set);
     resetValue();
-  };
-
-  const handleDeleteRowSet = (index: number) => {
-    deleteRowSet(row.id, index);
   };
 
   const resizeHeight = useCallback(() => {
@@ -132,17 +127,17 @@ export default function RowCard({ row, createRowSet, deleteRowSet }: Props) {
               <div className="flex grow items-center gap-4">
                 <div className="flex items-center gap-1">
                   <Dumbbell className="size-4" />
-                  <span>중량 : {convert62to10(weight)}</span>
+                  <span>중량 : {weight}</span>
                 </div>
                 <div className="flex items-center gap-1">
                   <RefreshCw className="size-4" />
-                  <span>반복 : {convert62to10(reps)}</span>
+                  <span>반복 : {reps}</span>
                 </div>
               </div>
               <Button
                 className={cn('size-6 cursor-pointer')}
                 variant="ghost"
-                onClick={() => handleDeleteRowSet(i)}
+                onClick={() => deleteRowSet(row.id, i)}
               >
                 <X className="size-4" />
               </Button>
@@ -168,8 +163,8 @@ export default function RowCard({ row, createRowSet, deleteRowSet }: Props) {
                   id="weight"
                   name="weight"
                   type="number"
-                  placeholder="중량"
                   value={values.weight}
+                  placeholder="중량"
                   onChange={handleChangeValue}
                 />
               </div>
@@ -182,8 +177,8 @@ export default function RowCard({ row, createRowSet, deleteRowSet }: Props) {
                   id="reps"
                   name="reps"
                   type="number"
-                  placeholder="반복"
                   value={values.reps}
+                  placeholder="반복"
                   onChange={handleChangeValue}
                 />
               </div>
