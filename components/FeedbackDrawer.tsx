@@ -2,15 +2,14 @@ import { BotMessageSquare, ListFilter, LoaderCircle } from 'lucide-react';
 import { Button } from './ui/button';
 import { Drawer } from './ui/drawer';
 import { MouseEvent, useState } from 'react';
-import { ColumnType } from '@/mock/column';
+import { ColumnType, SetType } from '@/mock/column';
 import { EXERCISE_DATA } from '@/mock/exercise';
-import { convert62to10 } from '@/lib/convertNumeralSystem';
 import { createFeedBack } from '@/service/ai.api';
 import DrawerElement from './DrawerElement';
 
 type RoutineType = {
   name: string;
-  sets: { weight: number; reps: number }[];
+  sets: SetType[];
 }[];
 
 type OptionType = 'sequence' | 'strength' | 'exercise';
@@ -138,10 +137,7 @@ const makeRoutine = (data: ColumnType) => {
     if (!exercise) return;
     prompt.push({
       name: exercise.ko,
-      sets: sets.map((e) => ({
-        weight: convert62to10(e.weight),
-        reps: convert62to10(e.reps),
-      })),
+      sets,
     });
   });
   return prompt;
