@@ -1,4 +1,4 @@
-import { COLUMN_DATA, ColumnType } from '@/mock/column';
+import { ColumnType } from '@/mock/column';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
@@ -13,7 +13,7 @@ type Actions = {
 const useColumnsStore = create<State & Actions>()(
   persist(
     (set) => ({
-      columns: [COLUMN_DATA],
+      columns: [],
       setColumns: (columns: ColumnType[]) => set({ columns }),
     }),
     { name: 'faithful-muscle-columns' },

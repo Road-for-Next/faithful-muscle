@@ -1,13 +1,20 @@
 import { ColumnType, RowType, SetType } from '@/mock/column';
 import useColumnsStore from '@/stores/useColumns.store';
-import { useCallback } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import useDayStore from '@/stores/useDay.store';
+import { decodeQueryToColumn, encodeColumnToQuery } from '@/lib/codecColumn';
 
 const useColumns = () => {
+  const [initialized, setInitialized] = useState(false);
   const { columns, setColumns } = useColumnsStore((state) => state);
   const day = useDayStore((state) => state.day);
-
   const column = columns[day];
+  const initialQuery = useMemo(() => {
+    if (typeof window !== 'undefined') {
+      return new URLSearchParams(window.location.search).get('q');
+    }
+    return null;
+  }, []);
 
   const setColumn = useCallback(
     (column: ColumnType) => {
@@ -47,6 +54,31 @@ const useColumns = () => {
     });
     setColumns(next);
   };
+
+  useEffect(() => {
+    if (!initialized && initialQuery) {
+      const next: ColumnType[] = [];
+      const temp = initialQuery.split('.');
+      temp.forEach((e) => {
+        const { day: _day, column } = decodeQueryToColumn(e);
+        next[Number(_day)] = column;
+      });
+      setColumns(next);
+    }
+    setInitialized(true);
+  }, [initialized, initialQuery, setColumns]);
+
+  useEffect(() => {
+    if (!initialized) return;
+    const result: string[] = [];
+    columns.forEach((col, i) => {
+      if (Array.isArray(col)) {
+        result.push(encodeColumnToQuery(i, col));
+      }
+    });
+    const save = result.join('.');
+    window.history.pushState({}, '', '?q=' + save);
+  }, [initialized, columns]);
 
   return {
     column,
