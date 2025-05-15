@@ -14,19 +14,10 @@ export default function Home() {
   const { column, createRow, createRowSet, deleteRowSet } = useColumns();
 
   const handleClickCopy = async () => {
-    if (!column || column?.length === 0)
-      return alert('등록된 운동 계획이 없습니다.');
-
-    const text = location.href;
-
     try {
-      if (text) {
-        await navigator.clipboard.writeText(text);
-        console.log(text);
-      } else {
-        alert('클립보드에 복사되었습니다.');
-        console.log('복사할 데이터가 없습니다.');
-      }
+      const text = location.href;
+      await navigator.clipboard.writeText(text);
+      alert('링크가 복사되었습니다.');
     } catch (e) {
       console.log(e);
     }
