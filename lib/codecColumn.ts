@@ -19,7 +19,6 @@ const encodeColumnToQuery = (day: number, column: ColumnType) => {
       const reps = convert10to62(set.reps);
       const w = weight.length === W_LENGTH ? weight : '0' + weight;
       const r = reps.length === R_LENGTH ? reps : '0' + reps;
-      console.log(w, r);
       return w + r;
     });
     return exerciseId + ss.join('');

@@ -3,9 +3,9 @@ import instance from '@/service/axios';
 interface IData {
   routine: string;
   option: {
-    sequence: boolean;
-    strength: boolean;
-    exercise: boolean;
+    routineComposition: boolean;
+    exerciseArrangement: boolean;
+    exerciseStrength: boolean;
   };
 }
 

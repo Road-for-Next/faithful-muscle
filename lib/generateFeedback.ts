@@ -1,13 +1,32 @@
-import { GoogleGenAI } from '@google/genai';
+import { GoogleGenAI, Type } from '@google/genai';
 
 interface IData {
   routine: string;
   option: {
-    sequence: boolean;
-    strength: boolean;
-    exercise: boolean;
+    routineComposition: boolean;
+    exerciseArrangement: boolean;
+    exerciseStrength: boolean;
   };
 }
+
+const responseSchema = {
+  type: Type.OBJECT,
+  properties: {
+    routineComposition: {
+      type: Type.STRING,
+      description: '루틴이 적절하게 구성했는지 평가하고 장점과 개선점을 알려줘',
+    },
+    exerciseArrangement: {
+      type: Type.STRING,
+      description:
+        '운동의 배치가 적절한지에 판단하고 더 좋은 배치가 있다면 알려줘',
+    },
+    exerciseStrength: {
+      type: Type.STRING,
+      description: '운동의 강도가 적절한지에 대해 평가해줘',
+    },
+  },
+};
 
 export default async function generateFeedback(data: IData) {
   const key = process.env.GEMINI_API_KEY;
@@ -16,21 +35,23 @@ export default async function generateFeedback(data: IData) {
 
   if (!data) throw new Error('Input data is empty or invalid.');
 
-  const { routine, option } = data;
+  const { routine } = data;
 
   if (!routine || routine.trim().length === 0) {
     throw new Error('Input text is empty or invalid.');
   }
 
-  console.dir(option);
-
-  const prompt = `다음 계획을 보고 하루 운동 루틴에 대해 적절하게 운동을 선택, 정렬, 강도 설정 했는지에 대해서만 짧은 피드백 해줘. 무게 단위는 kg 루틴 : ${routine}`;
+  const prompt = `responseSchema에 맞게 일일 루틴을 피드백해. routine : ${routine}`;
 
   try {
     const genAI = new GoogleGenAI({ apiKey: key });
     const response = await genAI.models.generateContent({
       model: 'gemini-2.0-flash-lite',
       contents: prompt,
+      config: {
+        responseMimeType: 'application/json',
+        responseSchema,
+      },
     });
 
     if (!response.text) {

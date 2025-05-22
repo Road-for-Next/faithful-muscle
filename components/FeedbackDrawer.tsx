@@ -12,7 +12,10 @@ type RoutineType = {
   sets: SetType[];
 }[];
 
-type OptionType = 'sequence' | 'strength' | 'exercise';
+type OptionType =
+  | 'routineComposition'
+  | 'exerciseArrangement'
+  | 'exerciseStrength';
 
 interface Props {
   column: ColumnType;
@@ -21,9 +24,9 @@ interface Props {
 export default function FeedbackDrawer({ column }: Props) {
   const [isCooldown, setIsCooldown] = useState(false);
   const [option, setOption] = useState<Record<OptionType, boolean>>({
-    sequence: false,
-    strength: false,
-    exercise: false,
+    routineComposition: false,
+    exerciseArrangement: false,
+    exerciseStrength: false,
   });
 
   const handleClickOption = (name: OptionType) =>
@@ -44,10 +47,11 @@ export default function FeedbackDrawer({ column }: Props) {
       option,
     };
 
-    await createFeedBack(body).then((result) => {
-      console.log(result);
-      setIsCooldown(false);
-    });
+    await createFeedBack(body)
+      .then((result) => {
+        console.log(result);
+      })
+      .finally(() => setIsCooldown(false));
   };
 
   return (
@@ -72,9 +76,9 @@ export default function FeedbackDrawer({ column }: Props) {
 }
 
 const OPTION_NAME: Record<OptionType, string> = {
-  sequence: '운동 순서',
-  strength: '운동 강도',
-  exercise: '운동 종류',
+  routineComposition: '루틴 구성',
+  exerciseArrangement: '운동 배치',
+  exerciseStrength: '운동 강도',
 };
 
 interface GenerateOptionSelectorProps {
