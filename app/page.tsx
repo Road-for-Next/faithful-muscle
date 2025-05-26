@@ -2,13 +2,13 @@
 
 import { Container } from '@/components/Container';
 import { ThemeSelector } from '@/components/ThemeSelector';
-import RowCard from '@/components/RowCard';
 import AddRowDrawer from '@/components/AddRowDrawer';
 import DaySelector from '@/components/DaySelector';
 import { Button } from '@/components/ui/button';
 import FeedbackDrawer from '@/components/FeedbackDrawer';
 import { Copy } from 'lucide-react';
 import useColumns from '@/hooks/useColumns';
+import RowCard from '@/components/RowCard';
 
 export default function Home() {
   const { column, createRow, createRowSet, deleteRowSet } = useColumns();
