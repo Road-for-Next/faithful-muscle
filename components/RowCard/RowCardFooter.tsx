@@ -1,48 +1,66 @@
-import { cn } from '@/lib/utils';
-import { CardFooter } from '../ui/card';
-import { Label } from '../ui/label';
-import { Dumbbell, RefreshCw } from 'lucide-react';
-import { Input } from '../ui/input';
-import { Button } from '../ui/button';
+import { CardFooter } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { useEffect, useState } from 'react';
 import { SetType } from '@/mock/column';
+import RowSetForm from './RowSetForm';
+import EditRowSetList from './EditRowSetList';
 
 export type StatusType = 'add' | 'edit' | 'none';
 
 interface Props {
+  sets: SetType[];
   status: StatusType;
   onChangeStatus: (value: StatusType) => void;
   onCreateRowSet: (value: SetType) => void;
+  onUpdatetRowSets: (value: SetType[]) => void;
 }
 
 export default function RowCardFooter({
+  sets,
   status,
   onChangeStatus,
   onCreateRowSet,
+  onUpdatetRowSets,
 }: Props) {
   const isAdd = status === 'add';
-  // const isEdit = status === 'edit';
-  const [value, setValue] = useState({
+  const isEdit = status === 'edit';
+  const [valuesForAdd, setValuesForAdd] = useState<
+    Record<keyof SetType, string>
+  >({
     weight: '',
     reps: '',
   });
+  const [valuesForEdit, setValuesForEdit] = useState<
+    Record<keyof SetType, string>[]
+  >([]);
 
-  const resetValue = () => setValue({ weight: '', reps: '' });
+  const resetValue = () => setValuesForAdd({ weight: '', reps: '' });
 
   const handleChangeStatusToAdd = () => onChangeStatus('add');
   const handleChangeStatusToEdit = () => onChangeStatus('edit');
   const handleChangeStatusToNone = () => onChangeStatus('none');
 
-  const handleChangeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setValue((prev) => ({
+  const handleChangeValueForAdd = (name: keyof SetType, value: string) => {
+    setValuesForAdd((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
 
+  const handleChangeValueForEdit = (
+    index: number,
+    name: keyof SetType,
+    value: string,
+  ) => {
+    setValuesForEdit((prev) => {
+      const next = [...prev];
+      next[index] = { ...next[index], [name]: value };
+      return next;
+    });
+  };
+
   const handleCreateRowSet = () => {
-    const { weight, reps } = value;
+    const { weight, reps } = valuesForAdd;
     if (!weight || !reps) return alert('빈 칸을 입력해주세요');
     const set = {
       weight: Number(weight),
@@ -50,6 +68,15 @@ export default function RowCardFooter({
     };
     onCreateRowSet(set);
     resetValue();
+  };
+
+  const handleUpdateRowSets = () => {
+    const param = valuesForEdit.map((value) => ({
+      weight: Number(value.weight),
+      reps: Number(value.reps),
+    }));
+    onUpdatetRowSets(param);
+    onChangeStatus('none');
   };
 
   const BUTTON_LEFT: Record<StatusType, FooterButtonProps> = {
@@ -60,7 +87,7 @@ export default function RowCardFooter({
     },
     edit: {
       variant: 'default',
-      handler: () => {},
+      handler: handleUpdateRowSets,
       text: '완료',
     },
     none: {
@@ -84,51 +111,33 @@ export default function RowCardFooter({
     none: {
       variant: 'outline',
       handler: handleChangeStatusToEdit,
-      text: '수정',
+      text: '수정하기',
     },
   };
 
   useEffect(() => resetValue(), [status]);
 
+  useEffect(
+    () =>
+      setValuesForEdit(
+        sets?.map(({ weight, reps }) => ({
+          weight: String(weight),
+          reps: String(reps),
+        })),
+      ),
+    [sets],
+  );
+
   return (
     <CardFooter className="mt-4 flex-col gap-4 px-0">
       {isAdd && (
-        <div
-          className={cn(
-            'animate-fade-in transition-all duration-300',
-            'flex items-center gap-2',
-            'h-9',
-          )}
-        >
-          <div className="flex items-center gap-2">
-            <Label htmlFor="weight" className="flex items-center gap-1">
-              <Dumbbell className="size-4" />
-              <span className="w-7">중량</span>
-            </Label>
-            <Input
-              id="weight"
-              name="weight"
-              type="number"
-              value={value.weight}
-              placeholder="중량"
-              onChange={handleChangeValue}
-            />
-          </div>
-          <div className="flex items-center gap-2">
-            <Label htmlFor="reps" className="flex items-center gap-1">
-              <RefreshCw className="size-4" />
-              <span className="block w-7">반복</span>
-            </Label>
-            <Input
-              id="reps"
-              name="reps"
-              type="number"
-              value={value.reps}
-              placeholder="반복"
-              onChange={handleChangeValue}
-            />
-          </div>
-        </div>
+        <RowSetForm values={valuesForAdd} onChange={handleChangeValueForAdd} />
+      )}
+      {isEdit && (
+        <EditRowSetList
+          sets={valuesForEdit}
+          onChange={handleChangeValueForEdit}
+        />
       )}
       <div className="flex w-full gap-2">
         <FooterButton {...BUTTON_LEFT[status]} />

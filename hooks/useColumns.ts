@@ -45,6 +45,12 @@ const useColumns = () => {
     setColumns(next);
   };
 
+  const updateRowSets = (id: string, sets: SetType[]) => {
+    const next = [...columns];
+    next[day] = next[day].map((e) => (e.id === id ? { ...e, sets } : e));
+    setColumns(next);
+  };
+
   const deleteRowSet = (id: string, index: number) => {
     const next = [...columns];
     next[day] = next[day].map((e) => {
@@ -86,6 +92,7 @@ const useColumns = () => {
     setColumn,
     createRow,
     createRowSet,
+    updateRowSets,
     deleteRowSet,
   };
 };

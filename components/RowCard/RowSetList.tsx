@@ -4,12 +4,11 @@ import { cn } from '@/lib/utils';
 import { SetType } from '@/mock/column';
 
 interface Props {
-  rowId: string;
   sets: SetType[];
-  onDelete: (id: string, index: number) => void;
+  onDelete: (index: number) => void;
 }
 
-export default function RowSetList({ rowId, sets, onDelete }: Props) {
+export default function RowSetList({ sets, onDelete }: Props) {
   return (
     <div className={cn('flex flex-col gap-2', 'text-sm')}>
       {sets.map(({ weight, reps }, i) => (
@@ -27,7 +26,7 @@ export default function RowSetList({ rowId, sets, onDelete }: Props) {
           <Button
             className={cn('size-6 cursor-pointer')}
             variant="ghost"
-            onClick={() => onDelete(rowId, i)}
+            onClick={() => onDelete(i)}
           >
             <X className="size-4" />
           </Button>

@@ -11,7 +11,8 @@ import useColumns from '@/hooks/useColumns';
 import RowCard from '@/components/RowCard';
 
 export default function Home() {
-  const { column, createRow, createRowSet, deleteRowSet } = useColumns();
+  const { column, createRow, createRowSet, updateRowSets, deleteRowSet } =
+    useColumns();
 
   const handleClickCopy = async () => {
     try {
@@ -47,6 +48,7 @@ export default function Home() {
             key={e.id}
             row={e}
             createRowSet={createRowSet}
+            updateRowSets={updateRowSets}
             deleteRowSet={deleteRowSet}
           />
         ))}

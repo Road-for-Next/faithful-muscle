@@ -12,10 +12,16 @@ import RowCardFooter, { StatusType } from './RowCardFooter';
 interface Props {
   row: RowType;
   createRowSet: (id: string, set: SetType) => void;
+  updateRowSets: (id: string, sets: SetType[]) => void;
   deleteRowSet: (id: string, index: number) => void;
 }
 
-export default function RowCard({ row, createRowSet, deleteRowSet }: Props) {
+export default function RowCard({
+  row,
+  createRowSet,
+  updateRowSets,
+  deleteRowSet,
+}: Props) {
   const { exerciseId, sets } = row;
   const data = EXERCISE_DATA.find((e) => e.id === exerciseId);
   const [open, setOpen] = useState(false);
@@ -33,6 +39,8 @@ export default function RowCard({ row, createRowSet, deleteRowSet }: Props) {
   };
 
   const handleCreateRowSet = (value: SetType) => createRowSet(row.id, value);
+  const handleUpdateRowSets = (value: SetType[]) =>
+    updateRowSets(row.id, value);
 
   const resizeHeight = useCallback(() => {
     if (!bodyRef.current) return;
@@ -47,12 +55,19 @@ export default function RowCard({ row, createRowSet, deleteRowSet }: Props) {
       <RowCardHeader data={data} open={open} onToggle={togglebody} />
       <RowCardBody ref={bodyRef} open={open} maxHeight={maxHeight}>
         <CardContent className="mx-0 px-2 py-0">
-          <RowSetList rowId={row.id} sets={sets} onDelete={deleteRowSet} />
+          {status !== 'edit' && (
+            <RowSetList
+              sets={sets}
+              onDelete={(index) => deleteRowSet(row.id, index)}
+            />
+          )}
         </CardContent>
         <RowCardFooter
+          sets={sets}
           status={status}
           onChangeStatus={handleChangeStatus}
           onCreateRowSet={handleCreateRowSet}
+          onUpdatetRowSets={handleUpdateRowSets}
         />
       </RowCardBody>
     </Card>
