@@ -17,6 +17,8 @@ type OptionType =
   | 'exerciseArrangement'
   | 'exerciseStrength';
 
+type FeedbackType = Record<OptionType, string> | null;
+
 interface Props {
   column: ColumnType;
 }
@@ -28,6 +30,7 @@ export default function FeedbackDrawer({ column }: Props) {
     exerciseArrangement: false,
     exerciseStrength: false,
   });
+  const [feedback, setFeedback] = useState<FeedbackType>(null);
 
   const handleClickOption = (name: OptionType) =>
     setOption((prev) => ({ ...prev, [name]: !prev[name] }));
@@ -48,8 +51,12 @@ export default function FeedbackDrawer({ column }: Props) {
     };
 
     await createFeedBack(body)
-      .then((result) => {
-        console.log(result);
+      .then((response) => {
+        const result = JSON.parse(response);
+        setFeedback((prev) => ({ ...prev, ...result }));
+      })
+      .catch((e) => {
+        console.error(e);
       })
       .finally(() => setIsCooldown(false));
   };
@@ -67,6 +74,17 @@ export default function FeedbackDrawer({ column }: Props) {
         />
         <DrawerElement.Content>
           <GenerateOptionSelector option={option} onClick={handleClickOption} />
+          <div className="max-h-[45vh] overflow-scroll px-2">
+            {feedback &&
+              Object.keys(feedback).map((e) => (
+                <div key={e}>
+                  <h2 className="mb-1 text-lg font-semibold">
+                    {OPTION_NAME[e as OptionType]}
+                  </h2>
+                  <p className="pl-2">{feedback[e as OptionType]}</p>
+                </div>
+              ))}
+          </div>
           <GenerateButton loading={isCooldown} onClick={handleClickGenerate} />
         </DrawerElement.Content>
         <DrawerElement.Footer />
