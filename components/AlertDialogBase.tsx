@@ -17,9 +17,7 @@ export default function AlertDialogBase() {
   const title = useAlertDialogStore((state) => state.title);
   const description = useAlertDialogStore((state) => state.description);
   const handler = useAlertDialogStore((state) => state.handler);
-  const setOpen = useAlertDialogStore((state) => state.setOpen);
-
-  const hanldeClose = () => setOpen({ open: false });
+  const setClose = useAlertDialogStore((state) => state.setClose);
 
   return (
     <AlertDialog open={open} onOpenChange={() => {}}>
@@ -32,7 +30,7 @@ export default function AlertDialogBase() {
           <AlertDialogAction className="grow" onClick={handler}>
             확인
           </AlertDialogAction>
-          <Button className="grow" variant="outline" onClick={hanldeClose}>
+          <Button className="grow" variant="outline" onClick={setClose}>
             취소
           </Button>
         </AlertDialogFooter>
