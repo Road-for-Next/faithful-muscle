@@ -15,7 +15,7 @@ export default function RowSetList({ sets, onDelete }: Props) {
   const handleDelete = (index: number) => {
     setOpen({
       title: '삭제하기',
-      description: '해당 세트를 삭제 하시겠습니까?',
+      description: '해당 세트를 삭제할까요?',
       handler: () => onDelete(index),
     });
   };
