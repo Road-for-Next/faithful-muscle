@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { SetType } from '@/mock/column';
 import RowSetForm from './RowSetForm';
 import EditRowSetList from './EditRowSetList';
+import useAlertDialogStore from '@/stores/useAlertDialog.store';
 
 export type StatusType = 'add' | 'edit' | 'none';
 
@@ -22,6 +23,7 @@ export default function RowCardFooter({
   onCreateRowSet,
   onUpdatetRowSets,
 }: Props) {
+  const setOpen = useAlertDialogStore((state) => state.setOpen);
   const isAdd = status === 'add';
   const isEdit = status === 'edit';
   const [valuesForAdd, setValuesForAdd] = useState<
@@ -75,8 +77,14 @@ export default function RowCardFooter({
       weight: Number(value.weight),
       reps: Number(value.reps),
     }));
-    onUpdatetRowSets(param);
-    onChangeStatus('none');
+    setOpen({
+      title: '수정하기',
+      description: '운동 계획을 수정할까요?',
+      handler: () => {
+        onUpdatetRowSets(param);
+        onChangeStatus('none');
+      },
+    });
   };
 
   const BUTTON_LEFT: Record<StatusType, FooterButtonProps> = {
