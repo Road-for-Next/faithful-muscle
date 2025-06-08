@@ -1,5 +1,6 @@
 import { ThemeProvider } from 'next-themes';
 import './globals.css';
+import AlertDialogBase from '@/components/AlertDialogBase';
 
 export default function RootLayout({
   children,
@@ -15,6 +16,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <AlertDialogBase />
           {children}
         </ThemeProvider>
       </body>
