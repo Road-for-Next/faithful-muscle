@@ -5,6 +5,7 @@ import { SetType } from '@/mock/column';
 import RowSetForm from './RowSetForm';
 import EditRowSetList from './EditRowSetList';
 import useAlertDialogStore from '@/stores/useAlertDialog.store';
+import { toast } from 'sonner';
 
 export type StatusType = 'add' | 'edit' | 'none';
 
@@ -63,13 +64,24 @@ export default function RowCardFooter({
 
   const handleCreateRowSet = () => {
     const { weight, reps } = valuesForAdd;
-    if (!weight || !reps) return alert('빈 칸을 입력해주세요');
-    const set = {
-      weight: Number(weight),
-      reps: Number(reps),
-    };
-    onCreateRowSet(set);
-    resetValue();
+
+    if (!weight || !reps) {
+      toast.error('중량과 반복을 입력해주세요.');
+      return;
+    }
+
+    try {
+      const set = {
+        weight: Number(weight),
+        reps: Number(reps),
+      };
+      onCreateRowSet(set);
+      resetValue();
+      toast.success('계획을 추가했습니다.');
+    } catch (e) {
+      toast.error('계획 추가에 실패했습니다.');
+      console.log(e);
+    }
   };
 
   const handleUpdateRowSets = () => {
