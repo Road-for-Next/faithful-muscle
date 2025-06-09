@@ -17,7 +17,12 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Toaster position="bottom-center" />
+          <Toaster
+            position="bottom-center"
+            duration={2000}
+            richColors
+            visibleToasts={1}
+          />
           <AlertDialogBase />
           {children}
         </ThemeProvider>
