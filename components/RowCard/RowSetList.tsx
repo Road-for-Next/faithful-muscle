@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { SetType } from '@/mock/column';
 import useAlertDialogStore from '@/stores/useAlertDialog.store';
+import { toast } from 'sonner';
 
 interface Props {
   sets: SetType[];
@@ -13,11 +14,24 @@ export default function RowSetList({ sets, onDelete }: Props) {
   const setOpen = useAlertDialogStore((state) => state.setOpen);
 
   const handleDelete = (index: number) => {
-    setOpen({
-      title: '삭제하기',
-      description: '해당 세트를 삭제할까요?',
-      handler: () => onDelete(index),
-    });
+    try {
+      setOpen({
+        title: '삭제하기',
+        description: '해당 세트를 삭제할까요?',
+        handler: () => {
+          try {
+            onDelete(index);
+            toast.success('계획을 삭제했습니다.');
+          } catch (e) {
+            toast.error('계획 삭제에 실패했습니다.');
+            console.log(e);
+          }
+        },
+      });
+    } catch (e) {
+      toast.error('계획 삭제에 실패했습니다.');
+      console.log(e);
+    }
   };
 
   return (

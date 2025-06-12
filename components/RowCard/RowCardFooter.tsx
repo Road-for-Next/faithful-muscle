@@ -5,6 +5,7 @@ import { SetType } from '@/mock/column';
 import RowSetForm from './RowSetForm';
 import EditRowSetList from './EditRowSetList';
 import useAlertDialogStore from '@/stores/useAlertDialog.store';
+import { toast } from 'sonner';
 
 export type StatusType = 'add' | 'edit' | 'none';
 
@@ -63,28 +64,58 @@ export default function RowCardFooter({
 
   const handleCreateRowSet = () => {
     const { weight, reps } = valuesForAdd;
-    if (!weight || !reps) return alert('빈 칸을 입력해주세요');
-    const set = {
-      weight: Number(weight),
-      reps: Number(reps),
-    };
-    onCreateRowSet(set);
-    resetValue();
+
+    if (!weight || !reps) {
+      toast.error('중량과 반복을 입력해주세요.');
+      return;
+    }
+
+    try {
+      const set = {
+        weight: Number(weight),
+        reps: Number(reps),
+      };
+      onCreateRowSet(set);
+      resetValue();
+      toast.success('계획을 추가했습니다.');
+    } catch (e) {
+      toast.error('계획 추가에 실패했습니다.');
+      console.log(e);
+    }
   };
 
   const handleUpdateRowSets = () => {
-    const param = valuesForEdit.map((value) => ({
-      weight: Number(value.weight),
-      reps: Number(value.reps),
-    }));
-    setOpen({
-      title: '수정하기',
-      description: '운동 계획을 수정할까요?',
-      handler: () => {
-        onUpdatetRowSets(param);
-        onChangeStatus('none');
-      },
-    });
+    const isEmpty =
+      valuesForEdit.filter((value) => !value.weight || !value.reps).length > 0;
+
+    if (isEmpty) {
+      toast.error('중량과 반복을 입력해주세요.');
+      return;
+    }
+
+    try {
+      const param = valuesForEdit.map((value) => ({
+        weight: Number(value.weight),
+        reps: Number(value.reps),
+      }));
+      setOpen({
+        title: '수정하기',
+        description: '운동 계획을 수정할까요?',
+        handler: () => {
+          try {
+            onUpdatetRowSets(param);
+            onChangeStatus('none');
+            toast.success('계획을 수정했습니다.');
+          } catch (e) {
+            toast.error('계획 수정에 실패했습니다.');
+            console.log(e);
+          }
+        },
+      });
+    } catch (e) {
+      toast.error('계획 수정에 실패했습니다.');
+      console.log(e);
+    }
   };
 
   const BUTTON_LEFT: Record<StatusType, FooterButtonProps> = {

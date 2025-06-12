@@ -1,6 +1,7 @@
 import { ThemeProvider } from 'next-themes';
 import './globals.css';
 import AlertDialogBase from '@/components/AlertDialogBase';
+import { Toaster } from '@/components/ui/sonner';
 
 export default function RootLayout({
   children,
@@ -16,6 +17,12 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <Toaster
+            position="bottom-center"
+            duration={2000}
+            richColors
+            visibleToasts={1}
+          />
           <AlertDialogBase />
           {children}
         </ThemeProvider>

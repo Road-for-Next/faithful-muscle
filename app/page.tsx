@@ -9,6 +9,7 @@ import FeedbackDrawer from '@/components/FeedbackDrawer';
 import { Copy } from 'lucide-react';
 import useColumns from '@/hooks/useColumns';
 import RowCard from '@/components/RowCard';
+import { toast } from 'sonner';
 
 export default function Home() {
   const { column, createRow, createRowSet, updateRowSets, deleteRowSet } =
@@ -18,8 +19,9 @@ export default function Home() {
     try {
       const text = location.href;
       await navigator.clipboard.writeText(text);
-      alert('링크가 복사되었습니다.');
+      toast.success('클립보드에 복사되었습니다.');
     } catch (e) {
+      toast.error('클립보드에 복사에 실패했습니다.');
       console.log(e);
     }
   };
