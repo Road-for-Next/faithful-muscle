@@ -10,6 +10,7 @@ import { Copy } from 'lucide-react';
 import useColumns from '@/hooks/useColumns';
 import RowCard from '@/components/RowCard';
 import { toast } from 'sonner';
+import EmptyRoutine from '@/components/EmptyRoutine';
 
 export default function Home() {
   const { column, createRow, createRowSet, updateRowSets, deleteRowSet } =
@@ -44,7 +45,7 @@ export default function Home() {
         </div>
       </div>
       <div className="flex flex-col gap-4">
-        {column?.length > 0 || <div>등록된 운동 계획이 없습니다.</div>}
+        {column?.length > 0 || <EmptyRoutine />}
         {column?.map((e) => (
           <RowCard
             key={e.id}
