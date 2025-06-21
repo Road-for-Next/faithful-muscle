@@ -24,12 +24,11 @@ export default function RowSetForm({ values, onChange }: Props) {
       )}
     >
       <div className="flex items-center gap-2">
-        <Label htmlFor="weight" className="flex items-center gap-1">
+        <Label className="flex items-center gap-1">
           <Dumbbell className="size-4" />
           <span className="w-7">중량</span>
         </Label>
         <Input
-          id="weight"
           name="weight"
           type="number"
           value={values.weight}
@@ -38,12 +37,11 @@ export default function RowSetForm({ values, onChange }: Props) {
         />
       </div>
       <div className="flex items-center gap-2">
-        <Label htmlFor="reps" className="flex items-center gap-1">
+        <Label className="flex items-center gap-1">
           <RefreshCw className="size-4" />
           <span className="block w-7">반복</span>
         </Label>
         <Input
-          id="reps"
           name="reps"
           type="number"
           value={values.reps}
