@@ -155,13 +155,20 @@ interface GenerateButtonProps {
 
 function GenerateButton({ loading, onClick }: GenerateButtonProps) {
   return (
-    <Button variant={loading ? 'outline' : 'default'} onClick={onClick}>
-      {loading ? (
-        <LoaderCircle className="size-4 animate-spin" />
-      ) : (
-        <span>생성하기</span>
-      )}
-    </Button>
+    <button
+      onClick={onClick}
+      disabled={loading}
+      className="group relative inline-flex h-10 w-full overflow-hidden rounded-md p-0.5 focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2 focus:ring-offset-slate-50 focus:outline-none"
+    >
+      <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#10b981_0%,#d1fae5_50%,#10b981_100%)]" />
+      <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-md bg-linear-to-r from-emerald-500 to-green-700 px-3 py-1 text-sm font-medium text-white backdrop-blur-3xl transition-all transition-colors group-hover:from-emerald-600 group-hover:to-green-700">
+        {loading ? (
+          <LoaderCircle className="size-4 animate-spin" />
+        ) : (
+          <span>생성하기</span>
+        )}
+      </span>
+    </button>
   );
 }
 
