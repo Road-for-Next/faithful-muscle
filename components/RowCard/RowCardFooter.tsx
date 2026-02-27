@@ -3,11 +3,12 @@ import { Button } from '@/components/ui/button';
 import { SetType } from '@/mock/column';
 import RowSetForm from './RowSetForm';
 import EditRowSetList from './EditRowSetList';
-import { useRowCardFooter } from '@/useRowCardFooter';
+import { useRowCardFooter } from './useRowCardFooter';
 
 export type StatusType = 'add' | 'edit' | 'none';
 
 interface Props {
+  exerciseId: string;
   sets: SetType[];
   status: StatusType;
   onChangeStatus: (value: StatusType) => void;
@@ -16,7 +17,7 @@ interface Props {
 }
 
 export default function RowCardFooter(props: Props) {
-  const { status } = props;
+  const { status, exerciseId } = props;
   const isAdd = status === 'add';
   const isEdit = status === 'edit';
 
@@ -71,10 +72,15 @@ export default function RowCardFooter(props: Props) {
   return (
     <CardFooter className="mt-4 flex-col gap-4 px-0">
       {isAdd && (
-        <RowSetForm values={valuesForAdd} onChange={handleChangeValueForAdd} />
+        <RowSetForm
+          exerciseId={exerciseId}
+          values={valuesForAdd}
+          onChange={handleChangeValueForAdd}
+        />
       )}
       {isEdit && (
         <EditRowSetList
+          exerciseId={exerciseId}
           sets={valuesForEdit}
           onChange={handleChangeValueForEdit}
         />

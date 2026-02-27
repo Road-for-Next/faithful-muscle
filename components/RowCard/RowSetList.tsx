@@ -1,17 +1,20 @@
-import { Dumbbell, RefreshCw, X } from 'lucide-react';
+import { Dumbbell, RefreshCw, X, Footprints, Timer } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { SetType } from '@/mock/column';
 import useAlertDialogStore from '@/stores/useAlertDialog.store';
 import { toast } from 'sonner';
+import { isCardio } from '@/mock/exercise';
 
 interface Props {
   sets: SetType[];
+  exerciseId: string;
   onDelete: (index: number) => void;
 }
 
-export default function RowSetList({ sets, onDelete }: Props) {
+export default function RowSetList({ sets, exerciseId, onDelete }: Props) {
   const setOpen = useAlertDialogStore((state) => state.setOpen);
+  const isCardioExercise = isCardio(exerciseId);
 
   const handleDelete = (index: number) => {
     try {
@@ -40,12 +43,27 @@ export default function RowSetList({ sets, onDelete }: Props) {
         <div key={`${weight}-${reps}-${index}`} className="flex items-center">
           <div className="flex grow items-center gap-4">
             <div className="flex items-center gap-1">
-              <Dumbbell className="size-4" />
-              <span>중량 : {weight}</span>
+              {isCardioExercise ? (
+                <Footprints className="size-4" />
+              ) : (
+                <Dumbbell className="size-4" />
+              )}
+              <span>
+                {isCardioExercise ? '거리' : '중량'} :{' '}
+                {isCardioExercise ? weight / 10 : weight}
+                {isCardioExercise ? 'km' : 'kg'}
+              </span>
             </div>
             <div className="flex items-center gap-1">
-              <RefreshCw className="size-4" />
-              <span>반복 : {reps}</span>
+              {isCardioExercise ? (
+                <Timer className="size-4" />
+              ) : (
+                <RefreshCw className="size-4" />
+              )}
+              <span>
+                {isCardioExercise ? '시간' : '반복'} : {reps}
+                {isCardioExercise ? '분' : '회'}
+              </span>
             </div>
           </div>
           <Button

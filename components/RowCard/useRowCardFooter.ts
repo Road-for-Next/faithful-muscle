@@ -3,8 +3,10 @@ import { toast } from 'sonner';
 import useAlertDialogStore from '@/stores/useAlertDialog.store';
 import { SetType } from '@/mock/column';
 import { StatusType } from './RowCardFooter';
+import { isCardio } from '@/mock/exercise';
 
 interface UseRowCardFooterProps {
+  exerciseId: string;
   sets: SetType[];
   status: StatusType;
   onChangeStatus: (value: StatusType) => void;
@@ -13,6 +15,7 @@ interface UseRowCardFooterProps {
 }
 
 export const useRowCardFooter = ({
+  exerciseId,
   sets,
   status,
   onChangeStatus,
@@ -59,13 +62,15 @@ export const useRowCardFooter = ({
     const { weight, reps } = valuesForAdd;
 
     if (!weight || !reps) {
-      toast.error('중량과 반복을 입력해주세요.');
+      toast.error('모든 값을 입력해주세요.');
       return;
     }
 
     try {
       const set = {
-        weight: Number(weight),
+        weight: isCardio(exerciseId)
+          ? Math.round(Number(weight) * 10)
+          : Number(weight),
         reps: Number(reps),
       };
       onCreateRowSet(set);
@@ -82,13 +87,15 @@ export const useRowCardFooter = ({
       valuesForEdit.filter((value) => !value.weight || !value.reps).length > 0;
 
     if (isEmpty) {
-      toast.error('중량과 반복을 입력해주세요.');
+      toast.error('모든 값을 입력해주세요.');
       return;
     }
 
     try {
       const param = valuesForEdit.map((value) => ({
-        weight: Number(value.weight),
+        weight: isCardio(exerciseId)
+          ? Math.round(Number(value.weight) * 10)
+          : Number(value.weight),
         reps: Number(value.reps),
       }));
       setOpen({
@@ -117,11 +124,11 @@ export const useRowCardFooter = ({
     () =>
       setValuesForEdit(
         sets?.map(({ weight, reps }) => ({
-          weight: String(weight),
+          weight: isCardio(exerciseId) ? String(weight / 10) : String(weight),
           reps: String(reps),
         })) || [],
       ),
-    [sets],
+    [sets, exerciseId],
   );
 
   return {

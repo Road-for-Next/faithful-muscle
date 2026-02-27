@@ -58,12 +58,14 @@ export default function RowCard({
           {status !== 'edit' && (
             <RowSetList
               sets={sets}
+              exerciseId={exerciseId}
               onDelete={(index) => deleteRowSet(row.id, index)}
             />
           )}
         </CardContent>
         <RowCardFooter
           sets={sets}
+          exerciseId={exerciseId}
           status={status}
           onChangeStatus={handleChangeStatus}
           onCreateRowSet={handleCreateRowSet}

@@ -3,11 +3,12 @@ import RowSetForm from './RowSetForm';
 import { cn } from '@/lib/utils';
 
 interface Props {
+  exerciseId: string;
   sets: Record<keyof SetType, string>[];
   onChange: (index: number, name: keyof SetType, value: string) => void;
 }
 
-export default function EditRowSetList({ sets, onChange }: Props) {
+export default function EditRowSetList({ exerciseId, sets, onChange }: Props) {
   const handleChangeValue = (
     index: number,
     name: keyof SetType,
@@ -19,6 +20,7 @@ export default function EditRowSetList({ sets, onChange }: Props) {
       {sets.map((e, i) => (
         <RowSetForm
           key={i}
+          exerciseId={exerciseId}
           values={e}
           onChange={(name, value) => handleChangeValue(i, name, value)}
         />
