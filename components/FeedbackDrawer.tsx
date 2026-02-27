@@ -100,26 +100,26 @@ export default function FeedbackDrawer({ column }: Props) {
                     <div className="text-muted-foreground text-sm leading-relaxed">
                       <ReactMarkdown
                         components={{
-                          // eslint-no-unused-vars
+                          // eslint-disable-next-line @typescript-eslint/no-unused-vars
                           ul: ({ node, ...props }) => (
                             <ul className="my-2 list-disc pl-5" {...props} />
                           ),
-                          // eslint-no-unused-vars
+                          // eslint-disable-next-line @typescript-eslint/no-unused-vars
                           ol: ({ node, ...props }) => (
                             <ol className="my-2 list-decimal pl-5" {...props} />
                           ),
-                          // eslint-no-unused-vars
+                          // eslint-disable-next-line @typescript-eslint/no-unused-vars
                           li: ({ node, ...props }) => (
                             <li className="mb-1" {...props} />
                           ),
-                          // eslint-no-unused-vars
+                          // eslint-disable-next-line @typescript-eslint/no-unused-vars
                           strong: ({ node, ...props }) => (
                             <strong
                               className="text-foreground font-bold"
                               {...props}
                             />
                           ),
-                          // eslint-no-unused-vars
+                          // eslint-disable-next-line @typescript-eslint/no-unused-vars
                           p: ({ node, ...props }) => (
                             <p className="mb-2 last:mb-0" {...props} />
                           ),
