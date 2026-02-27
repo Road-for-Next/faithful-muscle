@@ -1,16 +1,16 @@
-import { BotMessageSquare, ListFilter, LoaderCircle } from 'lucide-react';
+import {
+  BotMessageSquare,
+  Check,
+  ListFilter,
+  LoaderCircle,
+} from 'lucide-react';
 import { Button } from './ui/button';
 import { Drawer } from './ui/drawer';
 import { MouseEvent, useState } from 'react';
-import { ColumnType, SetType } from '@/mock/column';
-import { EXERCISE_DATA } from '@/mock/exercise';
+import { ColumnType } from '@/mock/column';
+import { EXERCISE_DATA, isCardio } from '@/mock/exercise';
 import { createFeedBack } from '@/service/ai.api';
 import DrawerElement from './DrawerElement';
-
-type RoutineType = {
-  name: string;
-  sets: SetType[];
-}[];
 
 type OptionType =
   | 'routineComposition'
@@ -74,20 +74,31 @@ export default function FeedbackDrawer({ column }: Props) {
         />
         <DrawerElement.Content>
           <GenerateOptionSelector option={option} onClick={handleClickOption} />
-          <div className="max-h-[45vh] overflow-scroll px-2">
-            {feedback &&
-              Object.keys(feedback).map((e) => (
-                <div key={e}>
-                  <h2 className="mb-1 text-lg font-semibold">
-                    {OPTION_NAME[e as OptionType]}
-                  </h2>
-                  <p className="pl-2">{feedback[e as OptionType]}</p>
-                </div>
-              ))}
+          <div className="flex flex-col gap-4 px-1 py-2">
+            {feedback ? (
+              Object.entries(feedback).map(([key, value]) => {
+                if (!value) return null;
+                return (
+                  <div key={key} className="bg-muted/50 rounded-lg p-4">
+                    <h2 className="text-primary mb-2 flex items-center gap-2 font-semibold">
+                      {OPTION_NAME[key as OptionType]}
+                    </h2>
+                    <p className="text-muted-foreground text-sm leading-relaxed whitespace-pre-wrap">
+                      {value}
+                    </p>
+                  </div>
+                );
+              })
+            ) : (
+              <div className="text-muted-foreground flex h-40 items-center justify-center text-sm">
+                옵션을 선택하고 생성하기 버튼을 눌러주세요.
+              </div>
+            )}
           </div>
-          <GenerateButton loading={isCooldown} onClick={handleClickGenerate} />
         </DrawerElement.Content>
-        <DrawerElement.Footer />
+        <DrawerElement.Footer>
+          <GenerateButton loading={isCooldown} onClick={handleClickGenerate} />
+        </DrawerElement.Footer>
       </DrawerElement.Body>
     </Drawer>
   );
@@ -124,9 +135,11 @@ function GenerateOptionSelector({
             key={e}
             name={e}
             className="grow"
+            size="sm"
             variant={option[e as OptionType] ? 'default' : 'outline'}
             onClick={handleClickOption}
           >
+            {option[e as OptionType] && <Check className="mr-1 size-3" />}
             {OPTION_NAME[e as OptionType]}
           </Button>
         ))}
@@ -153,14 +166,29 @@ function GenerateButton({ loading, onClick }: GenerateButtonProps) {
 }
 
 const makeRoutine = (data: ColumnType) => {
-  const prompt: RoutineType = [];
-  data?.forEach(({ exerciseId, sets }) => {
-    const exercise = EXERCISE_DATA.find((e) => e.id === exerciseId);
-    if (!exercise) return;
-    prompt.push({
-      name: exercise.ko,
-      sets,
-    });
-  });
-  return prompt;
+  return data
+    ?.map(({ exerciseId, sets }) => {
+      const exercise = EXERCISE_DATA.find((e) => e.id === exerciseId);
+      if (!exercise) return null;
+
+      const isCardioExercise = isCardio(exerciseId);
+      const formattedSets = sets.map((set) => {
+        if (isCardioExercise) {
+          return {
+            weight: `${set.weight / 10}km`,
+            reps: `${set.reps}분`,
+          };
+        }
+        return {
+          weight: `${set.weight}kg`,
+          reps: `${set.reps}회`,
+        };
+      });
+
+      return {
+        name: exercise.ko,
+        sets: formattedSets,
+      };
+    })
+    .filter(Boolean);
 };

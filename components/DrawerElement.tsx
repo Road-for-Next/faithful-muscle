@@ -26,7 +26,7 @@ interface BodyProps {
 
 function Body({ children }: BodyProps) {
   return (
-    <DrawerContent className="max-w-m-max min-w-m-min mx-auto h-[80vh]">
+    <DrawerContent className="max-w-m-max min-w-m-min mx-auto flex h-[80vh] flex-col">
       {children}
     </DrawerContent>
   );
@@ -79,18 +79,24 @@ interface ContentProps {
 }
 
 function Content({ children }: ContentProps) {
-  return <div className="flex flex-col gap-4 p-3">{children}</div>;
+  return (
+    <div className="[&::-webkit-scrollbar-thumb]:bg-muted-foreground/20 flex flex-1 flex-col gap-4 overflow-y-auto p-3 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full">
+      {children}
+    </div>
+  );
 }
 
 interface FooterProps {
   closerRef?: React.RefObject<HTMLButtonElement | null>;
+  children?: ReactNode;
 }
 
-function Footer({ closerRef }: FooterProps) {
+function Footer({ closerRef, children }: FooterProps) {
   return (
     <DrawerFooter>
+      {children}
       <DrawerClose asChild>
-        <Button variant="outline" ref={closerRef}>
+        <Button variant="outline" ref={closerRef} className="w-full">
           취소하기
         </Button>
       </DrawerClose>

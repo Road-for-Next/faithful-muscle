@@ -9,25 +9,6 @@ interface IData {
   };
 }
 
-const responseSchema = {
-  type: Type.OBJECT,
-  properties: {
-    routineComposition: {
-      type: Type.STRING,
-      description: '루틴이 적절하게 구성했는지 평가하고 장점과 개선점을 알려줘',
-    },
-    exerciseArrangement: {
-      type: Type.STRING,
-      description:
-        '운동의 배치가 적절한지에 판단하고 더 좋은 배치가 있다면 알려줘',
-    },
-    exerciseStrength: {
-      type: Type.STRING,
-      description: '운동의 강도가 적절한지에 대해 평가해줘',
-    },
-  },
-};
-
 export default async function generateFeedback(data: IData) {
   const key = process.env.GEMINI_API_KEY;
 
@@ -35,18 +16,56 @@ export default async function generateFeedback(data: IData) {
 
   if (!data) throw new Error('Input data is empty or invalid.');
 
-  const { routine } = data;
+  const { routine, option } = data;
 
   if (!routine || routine.trim().length === 0) {
     throw new Error('Input text is empty or invalid.');
   }
 
-  const prompt = `responseSchema에 맞게 일일 루틴을 피드백해. routine : ${routine}`;
+  const properties: Record<string, any> = {};
+
+  if (option.routineComposition) {
+    properties.routineComposition = {
+      type: Type.STRING,
+      description:
+        '루틴의 구성, 종목 선정의 적절성, 부위별 배분 등을 평가하고 장점과 구체적인 개선점을 서술',
+    };
+  }
+  if (option.exerciseArrangement) {
+    properties.exerciseArrangement = {
+      type: Type.STRING,
+      description:
+        '운동 순서의 효율성(대근육->소근육, 복합관절->단순관절 등)을 판단하고 더 나은 배치가 있다면 제안',
+    };
+  }
+  if (option.exerciseStrength) {
+    properties.exerciseStrength = {
+      type: Type.STRING,
+      description:
+        '세트 수, 무게, 반복 횟수(또는 거리, 시간)를 고려한 운동 강도 및 볼륨 평가',
+    };
+  }
+
+  const responseSchema = { type: Type.OBJECT, properties };
+
+  let prompt = `전문 트레이너의 관점에서 다음 운동 루틴에 대한 피드백을 responseSchema에 맞춰 JSON으로 제공해줘. 루틴 데이터: ${routine}\n`;
+
+  prompt += `각 항목에 대한 작성 지침:\n`;
+
+  if (option.routineComposition) {
+    prompt += `- routineComposition: 루틴의 전반적인 구성과 균형을 분석하고, 부족한 부분이나 과한 부분에 대해 조언해줘.\n`;
+  }
+  if (option.exerciseArrangement) {
+    prompt += `- exerciseArrangement: 운동 수행 순서가 에너지를 효율적으로 사용할 수 있도록 배치되었는지 확인하고 수정 제안을 해줘.\n`;
+  }
+  if (option.exerciseStrength) {
+    prompt += `- exerciseStrength: 설정된 무게와 횟수(또는 거리와 시간)가 해당 운동의 일반적인 목적(근비대, 지구력 등)에 부합하는지 평가해줘.\n`;
+  }
 
   try {
     const genAI = new GoogleGenAI({ apiKey: key });
     const response = await genAI.models.generateContent({
-      model: 'gemini-2.0-flash-lite',
+      model: 'gemini-2.5-flash-lite',
       contents: prompt,
       config: {
         responseMimeType: 'application/json',
