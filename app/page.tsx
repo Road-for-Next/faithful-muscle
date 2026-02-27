@@ -13,8 +13,14 @@ import { toast } from 'sonner';
 import EmptyRoutine from '@/components/EmptyRoutine';
 
 export default function Home() {
-  const { column, createRow, createRowSet, updateRowSets, deleteRowSet } =
-    useColumns();
+  const {
+    column,
+    createRow,
+    createRowSet,
+    updateRowSets,
+    deleteRowSet,
+    deleteRow,
+  } = useColumns();
 
   const handleClickCopy = async () => {
     try {
@@ -53,6 +59,7 @@ export default function Home() {
             createRowSet={createRowSet}
             updateRowSets={updateRowSets}
             deleteRowSet={deleteRowSet}
+            deleteRow={deleteRow}
           />
         ))}
       </div>

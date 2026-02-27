@@ -61,6 +61,12 @@ const useColumns = () => {
     setColumns(next);
   };
 
+  const deleteRow = (id: string) => {
+    const next = [...columns];
+    next[day] = next[day].filter((e) => e.id !== id);
+    setColumns(next);
+  };
+
   useEffect(() => {
     if (!initialized && initialQuery) {
       const next: ColumnType[] = [];
@@ -94,6 +100,7 @@ const useColumns = () => {
     createRowSet,
     updateRowSets,
     deleteRowSet,
+    deleteRow,
   };
 };
 

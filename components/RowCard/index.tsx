@@ -14,6 +14,7 @@ interface Props {
   createRowSet: (id: string, set: SetType) => void;
   updateRowSets: (id: string, sets: SetType[]) => void;
   deleteRowSet: (id: string, index: number) => void;
+  deleteRow: (id: string) => void;
 }
 
 export default function RowCard({
@@ -21,6 +22,7 @@ export default function RowCard({
   createRowSet,
   updateRowSets,
   deleteRowSet,
+  deleteRow,
 }: Props) {
   const { exerciseId, sets } = row;
   const data = EXERCISE_DATA.find((e) => e.id === exerciseId);
@@ -70,6 +72,7 @@ export default function RowCard({
           onChangeStatus={handleChangeStatus}
           onCreateRowSet={handleCreateRowSet}
           onUpdatetRowSets={handleUpdateRowSets}
+          onDeleteRow={() => deleteRow(row.id)}
         />
       </RowCardBody>
     </Card>

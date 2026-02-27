@@ -4,6 +4,7 @@ import { SetType } from '@/mock/column';
 import RowSetForm from './RowSetForm';
 import EditRowSetList from './EditRowSetList';
 import { useRowCardFooter } from './useRowCardFooter';
+import { Pencil, Trash2 } from 'lucide-react';
 
 export type StatusType = 'add' | 'edit' | 'none';
 
@@ -14,6 +15,7 @@ interface Props {
   onChangeStatus: (value: StatusType) => void;
   onCreateRowSet: (value: SetType) => void;
   onUpdatetRowSets: (value: SetType[]) => void;
+  onDeleteRow: () => void;
 }
 
 export default function RowCardFooter(props: Props) {
@@ -31,43 +33,32 @@ export default function RowCardFooter(props: Props) {
     handleChangeStatusToAdd,
     handleChangeStatusToEdit,
     handleChangeStatusToNone,
+    handleDeleteRow,
   } = useRowCardFooter(props);
 
-  const BUTTON_LEFT: Record<StatusType, FooterButtonProps> = {
-    add: {
-      variant: 'default',
-      handler: handleCreateRowSet,
-      text: '완료',
-    },
-    edit: {
-      variant: 'default',
-      handler: handleUpdateRowSets,
-      text: '완료',
-    },
-    none: {
-      variant: 'outline',
-      handler: handleChangeStatusToAdd,
-      text: '추가하기',
-    },
-  };
-
-  const BUTTON_RIGHT: Record<StatusType, FooterButtonProps> = {
-    add: {
-      variant: 'destructive',
-      handler: handleChangeStatusToNone,
-      text: '취소',
-    },
-    edit: {
-      variant: 'destructive',
-      handler: handleChangeStatusToNone,
-      text: '취소',
-    },
-    none: {
-      variant: 'outline',
-      handler: handleChangeStatusToEdit,
-      text: '수정하기',
-    },
-  };
+  if (status === 'none') {
+    return (
+      <CardFooter className="mt-4 flex gap-2 px-0">
+        <Button
+          variant="outline"
+          className="grow"
+          onClick={handleChangeStatusToAdd}
+        >
+          추가하기
+        </Button>
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={handleChangeStatusToEdit}
+        >
+          <Pencil className="size-4" />
+        </Button>
+        <Button variant="outline" size="icon" onClick={handleDeleteRow}>
+          <Trash2 className="size-4" />
+        </Button>
+      </CardFooter>
+    );
+  }
 
   return (
     <CardFooter className="mt-4 flex-col gap-4 px-0">
@@ -86,27 +77,21 @@ export default function RowCardFooter(props: Props) {
         />
       )}
       <div className="flex w-full gap-2">
-        <FooterButton {...BUTTON_LEFT[status]} />
-        <FooterButton {...BUTTON_RIGHT[status]} />
+        <Button
+          variant="default"
+          className="grow transition-colors duration-300"
+          onClick={isAdd ? handleCreateRowSet : handleUpdateRowSets}
+        >
+          완료
+        </Button>
+        <Button
+          variant="destructive"
+          className="grow transition-colors duration-300"
+          onClick={handleChangeStatusToNone}
+        >
+          취소
+        </Button>
       </div>
     </CardFooter>
-  );
-}
-
-interface FooterButtonProps {
-  variant: 'default' | 'outline' | 'destructive';
-  handler: () => void;
-  text: string;
-}
-
-function FooterButton({ variant, handler, text }: FooterButtonProps) {
-  return (
-    <Button
-      variant={variant}
-      className="grow transition-colors duration-300"
-      onClick={handler}
-    >
-      {text}
-    </Button>
   );
 }

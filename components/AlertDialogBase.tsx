@@ -1,5 +1,6 @@
 'use client';
 
+import { MouseEvent } from 'react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -19,15 +20,21 @@ export default function AlertDialogBase() {
   const handler = useAlertDialogStore((state) => state.handler);
   const setClose = useAlertDialogStore((state) => state.setClose);
 
+  const handleAction = (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    handler();
+    setClose();
+  };
+
   return (
-    <AlertDialog open={open} onOpenChange={() => {}}>
+    <AlertDialog open={open} onOpenChange={setClose}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>
           <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter className="flex-row">
-          <AlertDialogAction className="grow" onClick={handler}>
+          <AlertDialogAction className="grow" onClick={handleAction}>
             확인
           </AlertDialogAction>
           <Button className="grow" variant="outline" onClick={setClose}>

@@ -12,6 +12,7 @@ interface UseRowCardFooterProps {
   onChangeStatus: (value: StatusType) => void;
   onCreateRowSet: (value: SetType) => void;
   onUpdatetRowSets: (value: SetType[]) => void;
+  onDeleteRow: () => void;
 }
 
 export const useRowCardFooter = ({
@@ -21,6 +22,7 @@ export const useRowCardFooter = ({
   onChangeStatus,
   onCreateRowSet,
   onUpdatetRowSets,
+  onDeleteRow,
 }: UseRowCardFooterProps) => {
   const setOpen = useAlertDialogStore((state) => state.setOpen);
   const [valuesForAdd, setValuesForAdd] = useState<
@@ -118,6 +120,22 @@ export const useRowCardFooter = ({
     }
   };
 
+  const handleDeleteRow = () => {
+    setOpen({
+      title: '삭제하기',
+      description: '정말 이 운동을 삭제하시겠습니까?',
+      handler: () => {
+        try {
+          onDeleteRow();
+          toast.success('운동이 삭제되었습니다.');
+        } catch (e) {
+          console.error('Error Occurred AlertDialog handler', e);
+          toast.error('운동 삭제에 실패했습니다.');
+        }
+      },
+    });
+  };
+
   useEffect(() => resetValue(), [status]);
 
   useEffect(
@@ -141,5 +159,6 @@ export const useRowCardFooter = ({
     handleChangeStatusToAdd,
     handleChangeStatusToEdit,
     handleChangeStatusToNone,
+    handleDeleteRow,
   };
 };
