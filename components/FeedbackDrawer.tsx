@@ -11,6 +11,8 @@ import { ColumnType } from '@/mock/column';
 import { EXERCISE_DATA, isCardio } from '@/mock/exercise';
 import { createFeedBack } from '@/service/ai.api';
 import DrawerElement from './DrawerElement';
+import ReactMarkdown from 'react-markdown';
+import { toast } from 'sonner';
 
 type OptionType =
   | 'routineComposition'
@@ -37,11 +39,23 @@ export default function FeedbackDrawer({ column }: Props) {
 
   const handleClickGenerate = async () => {
     if (isCooldown) return;
-    if (!column) return;
+
+    if (!column || column.length === 0) {
+      toast.error('등록된 운동 계획이 없습니다.', { position: 'top-center' });
+      return;
+    }
+    const isOptionSelected = Object.values(option).some((value) => value);
+
+    if (!isOptionSelected) {
+      toast.error('피드백 옵션을 선택해주세요.', { position: 'top-center' });
+      return;
+    }
 
     const routine = JSON.stringify(makeRoutine(column));
-    if (!routine || routine.length === 0)
-      return alert('등록된 운동 계획이 없습니다.');
+    if (!routine || routine.length === 0) {
+      toast.error('등록된 운동 계획이 없습니다.', { position: 'top-center' });
+      return;
+    }
 
     setIsCooldown(true);
 
@@ -83,9 +97,32 @@ export default function FeedbackDrawer({ column }: Props) {
                     <h2 className="text-primary mb-2 flex items-center gap-2 font-semibold">
                       {OPTION_NAME[key as OptionType]}
                     </h2>
-                    <p className="text-muted-foreground text-sm leading-relaxed whitespace-pre-wrap">
-                      {value}
-                    </p>
+                    <div className="text-muted-foreground text-sm leading-relaxed">
+                      <ReactMarkdown
+                        components={{
+                          ul: ({ node, ...props }) => (
+                            <ul className="my-2 list-disc pl-5" {...props} />
+                          ),
+                          ol: ({ node, ...props }) => (
+                            <ol className="my-2 list-decimal pl-5" {...props} />
+                          ),
+                          li: ({ node, ...props }) => (
+                            <li className="mb-1" {...props} />
+                          ),
+                          strong: ({ node, ...props }) => (
+                            <strong
+                              className="text-foreground font-bold"
+                              {...props}
+                            />
+                          ),
+                          p: ({ node, ...props }) => (
+                            <p className="mb-2 last:mb-0" {...props} />
+                          ),
+                        }}
+                      >
+                        {value}
+                      </ReactMarkdown>
+                    </div>
                   </div>
                 );
               })
@@ -161,7 +198,7 @@ function GenerateButton({ loading, onClick }: GenerateButtonProps) {
       className="group relative inline-flex h-10 w-full overflow-hidden rounded-md p-0.5 focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2 focus:ring-offset-slate-50 focus:outline-none"
     >
       <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#10b981_0%,#d1fae5_50%,#10b981_100%)]" />
-      <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-md bg-linear-to-r from-emerald-500 to-green-700 px-3 py-1 text-sm font-medium text-white backdrop-blur-3xl transition-all transition-colors group-hover:from-emerald-600 group-hover:to-green-700">
+      <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-md bg-linear-to-r from-emerald-500 to-green-700 px-3 py-1 text-sm font-medium text-white backdrop-blur-3xl transition-all group-hover:from-emerald-600 group-hover:to-green-800">
         {loading ? (
           <LoaderCircle className="size-4 animate-spin" />
         ) : (
