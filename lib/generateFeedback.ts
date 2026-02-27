@@ -22,6 +22,7 @@ export default async function generateFeedback(data: IData) {
     throw new Error('Input text is empty or invalid.');
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const properties: Record<string, any> = {};
 
   if (option.routineComposition) {
