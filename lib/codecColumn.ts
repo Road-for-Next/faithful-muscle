@@ -30,6 +30,7 @@ const decodeQueryToColumn = (query: string) => {
   const now = Date.now().toString();
   const day = query.slice(0, 1);
   const temp = atob(query.slice(1));
+  if (!temp) return { day, column: [] };
   const col = temp.split(ROW_DIVISION);
   const column: ColumnType = col.map((e, index) => {
     const exerciseId = e.slice(0, e.length % S_LENGTH);

@@ -1,11 +1,9 @@
 import { CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { useEffect, useState } from 'react';
 import { SetType } from '@/mock/column';
 import RowSetForm from './RowSetForm';
 import EditRowSetList from './EditRowSetList';
-import useAlertDialogStore from '@/stores/useAlertDialog.store';
-import { toast } from 'sonner';
+import { useRowCardFooter } from '@/useRowCardFooter';
 
 export type StatusType = 'add' | 'edit' | 'none';
 
@@ -17,106 +15,22 @@ interface Props {
   onUpdatetRowSets: (value: SetType[]) => void;
 }
 
-export default function RowCardFooter({
-  sets,
-  status,
-  onChangeStatus,
-  onCreateRowSet,
-  onUpdatetRowSets,
-}: Props) {
-  const setOpen = useAlertDialogStore((state) => state.setOpen);
+export default function RowCardFooter(props: Props) {
+  const { status } = props;
   const isAdd = status === 'add';
   const isEdit = status === 'edit';
-  const [valuesForAdd, setValuesForAdd] = useState<
-    Record<keyof SetType, string>
-  >({
-    weight: '',
-    reps: '',
-  });
-  const [valuesForEdit, setValuesForEdit] = useState<
-    Record<keyof SetType, string>[]
-  >([]);
 
-  const resetValue = () => setValuesForAdd({ weight: '', reps: '' });
-
-  const handleChangeStatusToAdd = () => onChangeStatus('add');
-  const handleChangeStatusToEdit = () => onChangeStatus('edit');
-  const handleChangeStatusToNone = () => onChangeStatus('none');
-
-  const handleChangeValueForAdd = (name: keyof SetType, value: string) => {
-    setValuesForAdd((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleChangeValueForEdit = (
-    index: number,
-    name: keyof SetType,
-    value: string,
-  ) => {
-    setValuesForEdit((prev) => {
-      const next = [...prev];
-      next[index] = { ...next[index], [name]: value };
-      return next;
-    });
-  };
-
-  const handleCreateRowSet = () => {
-    const { weight, reps } = valuesForAdd;
-
-    if (!weight || !reps) {
-      toast.error('중량과 반복을 입력해주세요.');
-      return;
-    }
-
-    try {
-      const set = {
-        weight: Number(weight),
-        reps: Number(reps),
-      };
-      onCreateRowSet(set);
-      resetValue();
-      toast.success('계획을 추가했습니다.');
-    } catch (e) {
-      toast.error('계획 추가에 실패했습니다.');
-      console.log(e);
-    }
-  };
-
-  const handleUpdateRowSets = () => {
-    const isEmpty =
-      valuesForEdit.filter((value) => !value.weight || !value.reps).length > 0;
-
-    if (isEmpty) {
-      toast.error('중량과 반복을 입력해주세요.');
-      return;
-    }
-
-    try {
-      const param = valuesForEdit.map((value) => ({
-        weight: Number(value.weight),
-        reps: Number(value.reps),
-      }));
-      setOpen({
-        title: '수정하기',
-        description: '운동 계획을 수정할까요?',
-        handler: () => {
-          try {
-            onUpdatetRowSets(param);
-            onChangeStatus('none');
-            toast.success('계획을 수정했습니다.');
-          } catch (e) {
-            toast.error('계획 수정에 실패했습니다.');
-            console.log(e);
-          }
-        },
-      });
-    } catch (e) {
-      toast.error('계획 수정에 실패했습니다.');
-      console.log(e);
-    }
-  };
+  const {
+    valuesForAdd,
+    valuesForEdit,
+    handleChangeValueForAdd,
+    handleChangeValueForEdit,
+    handleCreateRowSet,
+    handleUpdateRowSets,
+    handleChangeStatusToAdd,
+    handleChangeStatusToEdit,
+    handleChangeStatusToNone,
+  } = useRowCardFooter(props);
 
   const BUTTON_LEFT: Record<StatusType, FooterButtonProps> = {
     add: {
@@ -153,19 +67,6 @@ export default function RowCardFooter({
       text: '수정하기',
     },
   };
-
-  useEffect(() => resetValue(), [status]);
-
-  useEffect(
-    () =>
-      setValuesForEdit(
-        sets?.map(({ weight, reps }) => ({
-          weight: String(weight),
-          reps: String(reps),
-        })),
-      ),
-    [sets],
-  );
 
   return (
     <CardFooter className="mt-4 flex-col gap-4 px-0">
